@@ -1,0 +1,86 @@
+
+%
+% The Daniel Caleb Jones Standard Document Style
+% ----------------------------------------------
+%
+% This is the document format I use for just about everything. Primarily, I just
+% use nicer fonts that the dreadful default, Computer Modern. In particular,
+%
+%  Roman       :  Sabon
+%  Sans-Serif  :  Helvetic Neue
+%  Math        :  Computer Modern Bright
+%  Monospace   :  DejaVu Sans Mono
+%
+%
+% I also tweak the geometry and section styles, etc.
+%
+%
+
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{cmbrightmath}
+\usepackage[cm-default]{fontspec}
+\usepackage{xltxtra}
+\usepackage{xunicode}
+\usepackage{geometry}
+\usepackage{natbib}
+\usepackage{float}
+
+\usepackage[labelfont=sf]{caption}
+\setlength{\captionmargin}{1em}
+\renewcommand{\captionfont}{\em}
+
+\geometry{left=0.75in,right=0.75in}
+
+\newcommand{\argmin}{\operatornamewithlimits{arg\,min}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\,max}}
+
+\renewcommand{\bibfont}{\footnotesize}
+
+\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
+
+\setsansfont[BoldFont={HelveticaNeue}]{HelveticaNeue}
+\setromanfont{Prociono}
+\setmonofont{DejaVu Sans Mono}
+
+
+\titleformat{\section}%
+  [hang]% shape
+  {\large\sffamily}% format applied to label+text
+  {\thesection}% label
+  {1em}% horizontal separation between label and title body
+  {\hspace{-0.2em}}% before the title body
+  []% after the title body
+
+\titleformat{\subsection}%
+  [hang]% shape
+  {\sffamily}% format applied to label+text
+  {\thesubsection}% label
+  {1em}% horizontal separation between label and title body
+  {\hspace{-0.2em}}% before the title body
+  []% after the title body
+
+\titleformat{\subsubsection}%
+  [hang]% shape
+  {\itshape}% format applied to label+text
+  {}% label
+  {1em}% horizontal separation between label and title body
+  {\hspace{-0.2em}}% before the title body
+  []% after the title body
+
+
+\newcommand{\dcjtitle}[2]
+{
+\hspace{-0.2em}
+\begin{minipage}{0.5\textwidth}
+\begin{center}
+\sffamily{\large{{#1}}} \vspace{0.8em}\\ 
+\sffamily{{{#2}}} \vspace{1em} \\
+\sffamily{\small{{\today}}} \\
+\end{center}
+\end{minipage}
+\vspace{2em}
+}
