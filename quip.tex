@@ -1,8 +1,19 @@
-% Compression of next-generation sequencing reads aided by highly efficient de novo assembly
-% Daniel C. Jones
-% \today
 
-# Abstract
+\documentclass[twocolumn]{article}
+
+\usepackage{dcj}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\title{Compression of next-generation sequencing reads aided by highly efficient de novo assembly}
+\author{Daniel C. Jones}
+
+\begin{document}
+
+\maketitle
+
+\section{Abstract}
 
 We present Quip, an extremely efficient compression algorithm for
 high-throughput sequencing data.  We use reference-based compression for aligned
@@ -16,7 +27,7 @@ Availability: Quip is freely available under an open-source license from
 \url{http://cs.washington.edu/homes/dcjones/quip}.
 
 
-# Introduction
+\section{Introduction}
 
 <!-- Notes on tho cost of sequencing versus the cost of disk storage. -->
 
@@ -27,32 +38,37 @@ Availability: Quip is freely available under an open-source license from
 <!-- Lossyness -->
 
 
-# Methods
+\section{Methods}
 
-## Probabalistic De Bruijn Graph Assembly
-
-## Statistical Compression with Arithmetic Coding
-
-### Read Identifiers
-
-### Nucleotide Sequences
-
-### Quality Scores
-
-# Referenced Based Compression
+\subsection{Probabalistic De Bruijn Graph Assembly}
 
 
+Though probabilistic data structures are 
 
 
-# Results
+\subsection{Statistical Compression with Arithmetic Coding}
+
+\subsubsection{Read Identifiers}
+
+\subsubsection{Nucleotide Sequences}
+
+\subsubsection{Quality Scores}
+
+\subsection{Referenced Based Compression}
+
+
+
+
+
+\section{Results}
 
 <!-- Chosen datasets. -->
 
-## Compression of Unaligned Reads
+\subsection{Compression of Unaligned Reads}
 
-## Reference-based Compression of Aligned Reads
+\subsection{Reference-based Compression of Aligned Reads}
 
-## Characteristics of the d-left Counting Bloom Filter
+\subsection{Characteristics of the d-left Counting Bloom Filter}
 
 Though our primary goal is efficient compression of sequencing data, the
 assembly algorithm we developed to achieve this is of independent interest.
@@ -70,17 +86,36 @@ particulars of the implementation. To perform a meaningful benchmark, we
 compared our dlCBF implementation to the sparsehash library, an open source
 hash table implementation with the expressed goal of maximizing space
 efficiency. Among many other uses, it is the core data structure in the ABySS
-and PASHA assemblers.
+\citep{Simpson2011} and PASHA \citep{Liu2011} assemblers.
 
-We randomly generated 10 million unique 25-mers and inserted them into an
-appropriately sized hash table, and to explore the trade-off between space and
-false positive rate, dlCBF tables of varying sizes. Run time and maximum
-memory usage were both recorded using the UNIX time command.
+We randomly generated 10 million unique 25-mers and inserted them into a hash
+table sized appropriately as to avoid expansion and rehashing. We repeated
+this with dlCBF tables of increasing sizes. In a table of fixed size, a
+$k$-mer may collide with another
 
-![TODO: caption](analysis/dlcbf/benchmark.pdf)
 
-Using only 20% of the space of the sparsehash table we accrue a false positive
-rate of less than 0.001.
+
+ and to explore
+the trade-off between space and false positive rate, dlCBF tables of varying
+sizes. Run time and maximum memory usage were both recorded using the Unix
+time command.
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=0.5\textwidth]{analysis/dlcbf/benchmark.pdf}}
+\caption{
+The tradeoff between memory usage and false positive rate in the dlCBF is
+evaluated by inserting 10 million unique 25-mers into tables of increasing
+size. Memory usage in reported as the proportion of the memory used by a
+memory efficient hash table to do the same.
+}
+\label{fig:dlcbf_bench}
+\end{figure}
+
+Using only 20\% of the space of the hash table the dlCBF accrues a false
+positive rate of less than 0.001 (Figure \ref{fig:dlcbf_bench}). While the
+hash table performed the 10 million insertions in 7.34 seconds, it required
+only 0.61 seconds on average for the dlCBF to do the same on a 2.8Ghz Intel
+Xeon processor. Table size did not greatly affect the runtime of the dlCBF.
 
 Though the authors of sparsehash claim only a 4 bit overhead for each entry,
 and have gone to considerably effort to achieve such efficiency, it still must
@@ -93,7 +128,17 @@ under this scheme, multiple collisions must occur to result in a false
 positive; an infrequent event if reasonably high-quality hash functions are
 chosen.
 
-# Discussion
+These results largely echo those of \citet{Zhang2009} who compared three
+variations on the counting Bloom filter and concluded that ``the dlCBF
+outperforms the others remarkably, in terms of both space efficiency and
+accuracy.''
+
+\section{Discussion}
+
+\bibliographystyle{plainnat}
+\bibliography{quip}
+
+\end{document}
 
 
 

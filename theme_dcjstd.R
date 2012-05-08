@@ -1,7 +1,7 @@
 
 
 
-theme_dcjstd <- function(base_size = 12, base_family = "")
+theme_dcjstd <- function(base_size = 12, base_family = "Helvetica")
 {
     structure(
         list(

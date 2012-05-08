@@ -13,7 +13,7 @@ from random import randint
 
 def timeit(cmd, input, parse_fpr = False):
     proc = subprocess.Popen(
-        ["gtime", "-f", "%e,%M"] + cmd,
+        ["/usr/bin/time", "-f", "%e,%M"] + cmd,
         stdout = subprocess.PIPE,
         stderr = subprocess.PIPE,
         stdin  = subprocess.PIPE)
@@ -69,7 +69,7 @@ def main():
 
     cs = [0.01]
     d = 0.01
-    while cs[-1] < 4.0:
+    while cs[-1] < 7.0:
         cs.append(cs[-1] + d)
 
     for c in cs:

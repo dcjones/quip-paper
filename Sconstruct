@@ -1,0 +1,6 @@
+
+
+env = Environment()
+env["PDFLATEX"] = "xelatex"
+env.PDF("quip.tex")
+
