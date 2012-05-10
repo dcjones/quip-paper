@@ -29,14 +29,34 @@ Availability: Quip is freely available under an open-source license from
 
 \section{Introduction}
 
-<!-- Notes on tho cost of sequencing versus the cost of disk storage. -->
+%% Notes on tho cost of sequencing versus the cost of disk storage.
 
-<!-- Historical work compressing DNA -->
+%% Historical work compressing DNA
 
-<!-- Recent work compressing short reads -->
+%% Recent work compressing short reads
 
-<!-- Lossyness -->
+A common theme in the growing literature on on short read compression is lossy
+encoding of sequence quality scores. \citet{Wan2011} explored three binning
+schemes that reduce the alphabet size of the quality scores before encoding
+them with one of several general purpose compression methods.
 
+%% Summarize literature of lossy quality compression here.
+
+This follows naturally from the realization that quality scores are
+particularly difficult to compress. Unlike read identifiers, which are highly
+redundant, or nucleotide sequences which XXX, quality scores are
+inconsistently encoded between protocols and computational pipelines and are
+often simply high-entropy. It is dissatisfying that metadata (quality scores)
+should consume more space than primary data (nucleotide sequences). Yet, also
+dissatisfying to many researchers is the thought of discarding information
+without a very good understanding of its affect on downstream analysis.
+Decreasing the entropy of quality scores while retaining accuracy is an
+worthwhile endeavor, but difficult given that both the algorithms that
+generate them and the algorithms that are informed by them are moving targets.
+
+% The compression algorithm we present here encodes quality scores losslessly,
+% though it is general enough to take advantage of any upstream lossy re-
+% encoding.
 
 \section{Methods}
 
@@ -56,13 +76,14 @@ Though probabilistic data structures are
 
 \subsection{Referenced Based Compression}
 
+%%
 
 
 
 
 \section{Results}
 
-<!-- Chosen datasets. -->
+%% Chosen datasets.
 
 \subsection{Compression of Unaligned Reads}
 
@@ -76,7 +97,7 @@ Only very recently has the idea of using probabilistic data structures in
 assembly been breached, and to our knowledge, we are the first to build
 a functioning assembler using the dlCBF.
 
-The precise false-positive rate of the data structure is unimportant when the
+The precise false positive rate of the data structure is unimportant when the
 goal is compression, but if the method is to be extended to perform actual
 analysis, it becomes a serious concern. The false positive rate of a Bloom
 filter can be obtained analytically, though doing so is not entirely trivial.
@@ -90,20 +111,17 @@ efficiency. Among many other uses, it is the core data structure in the ABySS
 
 We randomly generated 10 million unique 25-mers and inserted them into a hash
 table sized appropriately as to avoid expansion and rehashing. We repeated
-this with dlCBF tables of increasing sizes. In a table of fixed size, a
-$k$-mer may collide with another
-
-
-
- and to explore
-the trade-off between space and false positive rate, dlCBF tables of varying
-sizes. Run time and maximum memory usage were both recorded using the Unix
-time command.
+this with dlCBF tables of increasing sizes. Upon insertion, a false positive
+occurs when the hash functions computed on the inserted $k$-mer collide with a
+previously inserted $k$-mer. An insertion may also fail when a fixed size
+table is filled to capacity and no empty cells are available. For simplicity,
+we count these occurrences as ``false positives''. Run time and maximum memory
+usage were both recorded using the Unix time command.
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=0.5\textwidth]{analysis/dlcbf/benchmark.pdf}}
 \caption{
-The tradeoff between memory usage and false positive rate in the dlCBF is
+The trade-off between memory usage and false positive rate in the dlCBF is
 evaluated by inserting 10 million unique 25-mers into tables of increasing
 size. Memory usage in reported as the proportion of the memory used by a
 memory efficient hash table to do the same.
@@ -111,11 +129,12 @@ memory efficient hash table to do the same.
 \label{fig:dlcbf_bench}
 \end{figure}
 
-Using only 20\% of the space of the hash table the dlCBF accrues a false
-positive rate of less than 0.001 (Figure \ref{fig:dlcbf_bench}). While the
-hash table performed the 10 million insertions in 7.34 seconds, it required
-only 0.61 seconds on average for the dlCBF to do the same on a 2.8Ghz Intel
-Xeon processor. Table size did not greatly affect the runtime of the dlCBF.
+We find that with only 20\% of the space of the hash table the dlCBF accrues a
+false positive rate of less than 0.001 (Figure \ref{fig:dlcbf_bench}). While
+the hash table performed the 10 million insertions in 7.34 seconds, it
+required only 0.61 seconds on average for the dlCBF to do the same on a 2.8Ghz
+Intel Xeon processor. Table size did not greatly affect the runtime of the
+dlCBF.
 
 Though the authors of sparsehash claim only a 4 bit overhead for each entry,
 and have gone to considerably effort to achieve such efficiency, it still must
@@ -128,12 +147,24 @@ under this scheme, multiple collisions must occur to result in a false
 positive; an infrequent event if reasonably high-quality hash functions are
 chosen.
 
-These results largely echo those of \citet{Zhang2009} who compared three
-variations on the counting Bloom filter and concluded that ``the dlCBF
+A previous analysis of the dlCBF by \citet{Zhang2009} compared it to two other
+variations of the counting Bloom filter and concluded that ``the dlCBF
 outperforms the others remarkably, in terms of both space efficiency and
-accuracy.''
+accuracy.'' Overall, this data structure appears particularly adept for high
+efficiency de novo assembly.
 
 \section{Discussion}
+
+Our use of high-order Markov chain models and de novo assembly results in a
+program that uses significantly more memory than the others tested. Though
+limiting the memory used by a general purpose compression program enables it
+to be used on a wider variety of systems, this is less important in this
+domain-specific application. Common analysis of next-generation sequencing
+data, whether it be alignment, assembly, isoform quantification, peak calling,
+or SNP calling all require significant computational resources. Targeting
+low-memory systems would not be of particular benefit: next-generation
+sequencing precludes previous-generation hardware.
+
 
 \bibliographystyle{plainnat}
 \bibliography{quip}
