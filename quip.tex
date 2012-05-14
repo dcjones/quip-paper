@@ -33,12 +33,46 @@ Availability: Quip is freely available under an open-source license from
 
 %% Historical work compressing DNA
 
+
+%% Formats
+
+For its simplicity, FASTQ is a surprisingly ill-defined format. The closest
+thing to an accepted specification is the description by \citet{Cock2010}. The
+format arose ad hoc from multiple sources (primarily Sanger and
+Solexa/Illumina), so this specification in descriptive rather than
+prescriptive.
+
+The SAM format is both more complex and more tightly defined, and comes with a
+reference implementation in the form of SAMtools \citep{Li2009b}. It is able to
+store alignment information in addition to read identifiers, sequences, and
+quality scores. In addition, SAM files can be converted to the BAM formate, a
+compressed binary version of SAM, which is far more compact and allows for
+relatively efficient random access. 
+
+
+%% Referenced based compression
+
+This idea is explored also in the Goby format \citep{Goby2012}, in which,
+unlike the SAM/BAM format, the sequences of aligned reads are not stored but
+looked up in a reference genome when needed. For some applications reference-
+based compression can be taken much further by storing only SNP information,
+summarizing a sequencing experiment in mere kilobytes \citep{Christley2009}.
+However, even in these cases, discarding the raw reads would prevent any
+reanalysis of the data. 
+
 %% Recent work compressing short reads
 
 A common theme in the growing literature on on short read compression is lossy
 encoding of sequence quality scores. \citet{Wan2011} explored three binning
 schemes that reduce the alphabet size of the quality scores before encoding
 them with one of several general purpose compression methods.
+
+Something about \citet{Hach2012}.
+
+%% XXX: who else?
+
+
+
 
 %% Summarize literature of lossy quality compression here.
 
@@ -54,17 +88,10 @@ Decreasing the entropy of quality scores while retaining accuracy is an
 worthwhile endeavor, but difficult given that both the algorithms that
 generate them and the algorithms that are informed by them are moving targets.
 
-% The compression algorithm we present here encodes quality scores losslessly,
-% though it is general enough to take advantage of any upstream lossy re-
-% encoding.
 
 \section{Methods}
 
-\subsection{Probabalistic De Bruijn Graph Assembly}
-
-
-Though probabilistic data structures are 
-
+\subsection{Reference Based Compression}
 
 \subsection{Statistical Compression with Arithmetic Coding}
 
@@ -74,11 +101,10 @@ Though probabilistic data structures are
 
 \subsubsection{Quality Scores}
 
-\subsection{Referenced Based Compression}
 
-%%
+\subsection{Probabalistic De Bruijn Graph Assembly}
 
-
+% Though probabilistic data structures are 
 
 
 \section{Results}
@@ -86,6 +112,19 @@ Though probabilistic data structures are
 %% Chosen datasets.
 
 \subsection{Compression of Unaligned Reads}
+
+\begin{figure*}
+\centerline{\includegraphics[width=\textwidth]{analysis/sizes.pdf}}
+\caption{TODO}
+\label{fig:sizes}
+\end{figure*}
+
+\begin{figure*}
+\centerline{\includegraphics[width=\textwidth]{analysis/comp_time.pdf}}
+\centerline{\includegraphics[width=\textwidth]{analysis/decomp_time.pdf}}
+\caption{TODO}
+\label{fig:comp_decomp_time}
+\end{figure*}
 
 \subsection{Reference-based Compression of Aligned Reads}
 
@@ -154,6 +193,29 @@ accuracy.'' Overall, this data structure appears particularly adept for high
 efficiency de novo assembly.
 
 \section{Discussion}
+
+%% Points to make
+% We are doing de novo assembly faster than gzip can compress!!
+% DSRC support random access, but there is never a need for this with FASTQ.
+
+The Lempel-Ziv algorithm, particularly as implemented in gzip/libz has become
+a standard choice for compression. The zlib library has matured and stabilized
+over the course of two decades and is widely available. The BAM and Goby
+formats both use zlib for compression, and compressing FASTQ files with gzip
+is still common practice. Despite its ubiquity, our benchmarks show that it is
+remarkably poorly suited to NGS data. Both compression ratio and compression
+time were inferior to the other programs evaluated. For most purposes, the
+gains in decompression time do not make up for its shortcomings.
+
+Using a more sophisticated variation, the Lempel-Ziv-Markov algorithm
+implemented in xz results in a significant increase in compression, but at the
+cost of tremendously slow compression (often an entire day is required to
+compress a single lane from a HiSeq 2000). This is not a great surprise. The
+Lempel-Ziv algorithm works by matching repeated substrings in the input
+stream; an extremely effective technique for compressing text. When the data
+is not so highly structured, this technique breaks down.
+
+%% Something else here?
 
 Our use of high-order Markov chain models and de novo assembly results in a
 program that uses significantly more memory than the others tested. Though

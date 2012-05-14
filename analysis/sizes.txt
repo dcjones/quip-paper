@@ -3,6 +3,8 @@
   3380928847 3.sra
  18455714741 4.sra
  19512577562 5.sra
+  3129188318 6.sra
+  2464644680 7.sra
  19522432166 1.fastq
  16267482192 2_1.fastq
  16267482192 2_2.fastq
@@ -11,6 +13,9 @@
  33836531506 4_2.fastq
  27603121600 5_1.fastq
  27603121600 5_2.fastq
+ 16400187153 6.fastq
+  4459862036 7_1.fastq
+  4459862036 7_2.fastq
   4554226403 bzip2.comp/1.fastq.bzip2
   4953067774 bzip2.comp/2_1.fastq.bzip2
   4697429400 bzip2.comp/2_2.fastq.bzip2
@@ -23,6 +28,11 @@
   3204487078 dsrc.comp/3.fastq.dsrc
   8731696455 dsrc.comp/4_1.fastq.dsrc
   8616220461 dsrc.comp/4_2.fastq.dsrc
+  5883726822 dsrc.comp/5_1.fastq.dsrc
+  5704405403 dsrc.comp/5_2.fastq.dsrc
+  2972743932 dsrc.comp/6.fastq.dsrc
+  1139039591 dsrc.comp/7_1.fastq.dsrc
+  1175345684 dsrc.comp/7_2.fastq.dsrc
   5681500387 gzip.comp/1.fastq.gzip
   6167892669 gzip.comp/2_1.fastq.gzip
   5877854931 gzip.comp/2_2.fastq.gzip
@@ -35,11 +45,24 @@
   2694266326 quip.comp/3.fastq.quip
   7305985347 quip.comp/4_1.fastq.quip
   7214221244 quip.comp/4_2.fastq.quip
-    73523200 quip.comp/5_1.fastq.quip
+  4974784810 quip.comp/5_1.fastq.quip
+  4881928256 quip.comp/5_2.fastq.quip
+  1958189767 quip.comp/6.fastq.quip
+  3198428768 quip-quick.comp/1.fastq.quip
+  3818121152 quip-quick.comp/2_1.fastq.quip
+  3605473715 quip-quick.comp/2_2.fastq.quip
+  2728258702 quip-quick.comp/3.fastq.quip
+  7406597993 quip-quick.comp/4_1.fastq.quip
+  7314519359 quip-quick.comp/4_2.fastq.quip
+  5045156746 quip-quick.comp/5_1.fastq.quip
+  4952422935 quip-quick.comp/5_2.fastq.quip
+  2140635709 quip-quick.comp/6.fastq.quip
+   873968546 quip-quick.comp/7_1.fastq.quip
+   903417444 quip-quick.comp/7_2.fastq.quip
   4377812396 xz.comp/1.fastq.xz
   5023020464 xz.comp/2_1.fastq.xz
   4753461656 xz.comp/2_2.fastq.xz
   3715503064 xz.comp/3.fastq.xz
   9765695804 xz.comp/4_1.fastq.xz
   9663045380 xz.comp/4_2.fastq.xz
-426205357745 total
+435988547611 total
