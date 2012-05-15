@@ -39,15 +39,22 @@
   4661298396 gzip.comp/3.fastq.gzip
  12066643887 gzip.comp/4_1.fastq.gzip
  11943125672 gzip.comp/4_2.fastq.gzip
-  3088368423 quip.comp/1.fastq.quip
-  3781175035 quip.comp/2_1.fastq.quip
-  3569583820 quip.comp/2_2.fastq.quip
-  2694266326 quip.comp/3.fastq.quip
-  7305985347 quip.comp/4_1.fastq.quip
-  7214221244 quip.comp/4_2.fastq.quip
-  4974784810 quip.comp/5_1.fastq.quip
-  4881928256 quip.comp/5_2.fastq.quip
-  1958189767 quip.comp/6.fastq.quip
+  8485344938 gzip.comp/5_1.fastq.gzip
+  8345455236 gzip.comp/5_2.fastq.gzip
+  4403494851 gzip.comp/6.fastq.gzip
+  1562288733 gzip.comp/7_1.fastq.gzip
+  1603901369 gzip.comp/7_2.fastq.gzip
+  3024593552 quip.comp/1.fastq.quip
+  3781900438 quip.comp/2_1.fastq.quip
+  3570287487 quip.comp/2_2.fastq.quip
+  2697147809 quip.comp/3.fastq.quip
+  7309260982 quip.comp/4_1.fastq.quip
+  7217773725 quip.comp/4_2.fastq.quip
+  4939058044 quip.comp/5_1.fastq.quip
+  4848211081 quip.comp/5_2.fastq.quip
+  1970145014 quip.comp/6.fastq.quip
+   734351316 quip.comp/7_1.fastq.quip
+   765573485 quip.comp/7_2.fastq.quip
   3198428768 quip-quick.comp/1.fastq.quip
   3818121152 quip-quick.comp/2_1.fastq.quip
   3605473715 quip-quick.comp/2_2.fastq.quip
