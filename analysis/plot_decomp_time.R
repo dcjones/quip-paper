@@ -13,6 +13,7 @@ xs$prog <- factor(xs$prog,
         "xz",
         "sra",
         "dsrc",
+        "quip-quick",
         "quip"))
 
 

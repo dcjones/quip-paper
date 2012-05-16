@@ -29,12 +29,11 @@ Availability: Quip is freely available under an open-source license from
 
 \section{Introduction}
 
-%% Notes on tho cost of sequencing versus the cost of disk storage.
+% Some blathering about NGS
 
-%% Historical work compressing DNA
+% Disk storage costs.
 
-
-%% Formats
+% Formats
 
 For its simplicity, FASTQ is a surprisingly ill-defined format. The closest
 thing to an accepted specification is the description by \citet{Cock2010}. The
@@ -45,48 +44,76 @@ prescriptive.
 The SAM format is both more complex and more tightly defined, and comes with a
 reference implementation in the form of SAMtools \citep{Li2009b}. It is able to
 store alignment information in addition to read identifiers, sequences, and
-quality scores. In addition, SAM files can be converted to the BAM formate, a
+quality scores. In addition, SAM files can be converted to the BAM format, a
 compressed binary version of SAM, which is far more compact and allows for
 relatively efficient random access. 
 
+% DNA Compression
 
-%% Referenced based compression
+% NGS Compression
 
-This idea is explored also in the Goby format \citep{Goby2012}, in which,
-unlike the SAM/BAM format, the sequences of aligned reads are not stored but
-looked up in a reference genome when needed. For some applications reference-
-based compression can be taken much further by storing only SNP information,
-summarizing a sequencing experiment in mere kilobytes \citep{Christley2009}.
-However, even in these cases, discarding the raw reads would prevent any
-reanalysis of the data. 
+% Referenced-based compression
 
-%% Recent work compressing short reads
-
-A common theme in the growing literature on on short read compression is lossy
-encoding of sequence quality scores. \citet{Wan2011} explored three binning
-schemes that reduce the alphabet size of the quality scores before encoding
-them with one of several general purpose compression methods.
-
-Something about \citet{Hach2012}.
-
-%% XXX: who else?
+The fundamental characteristic of NGS data is that it consists of millions of
+fragments of greater whole, whether it be a genome sequence or splices mRNA
+sequences. This realization led \cite{Hsi-YangFritz2011}
 
 
 
+%% TODO: Fritz, et al
 
-%% Summarize literature of lossy quality compression here.
+This idea is explored also in the Goby format \citep{Goby2012}, in which the
+sequences of aligned reads are not stored but looked up in a reference genome
+when needed. For some applications reference- based compression can be taken
+much further by storing only SNP information, summarizing a sequencing
+experiment in mere kilobytes \citep{Christley2009}. However, even in these
+cases, discarding the raw reads would prevent any reanalysis of the data.
 
-This follows naturally from the realization that quality scores are
-particularly difficult to compress. Unlike read identifiers, which are highly
-redundant, or nucleotide sequences which XXX, quality scores are
-inconsistently encoded between protocols and computational pipelines and are
-often simply high-entropy. It is dissatisfying that metadata (quality scores)
-should consume more space than primary data (nucleotide sequences). Yet, also
-dissatisfying to many researchers is the thought of discarding information
-without a very good understanding of its affect on downstream analysis.
+
+% Lossy compression of quality scores
+
+A reoccurring theme in the  the growing literature on on short read
+compression is lossy encoding of sequence quality scores. This follows
+naturally from the realization that quality scores are particularly difficult
+to compress. Unlike read identifiers, which are highly redundant, or
+nucleotide sequences which XXX, quality scores are inconsistently encoded
+between protocols and computational pipelines and are often simply high-
+entropy. It is dissatisfying that metadata (quality scores) should consume
+more space than primary data (nucleotide sequences). Yet, also dissatisfying
+to many researchers is the thought of discarding information without a very
+good understanding of its affect on downstream analysis.
+
+A number of lossy compression algorithms for quality scores have been
+proposed, including various binning schemes to reduce the alphabet size
+\citep{Wan2011}, scaling to a reduced alphabet with randomized rounding
+\citep{Kozanitis2011}, and discarding quality scores for bases which match a
+reference sequence \citep{Hsi-YangFritz2011}. Only \citet{Kozanitis2011} go to
+the effort of evaluating the effects of their algorithm on downstream
+analysis. Their results suggest that while some SNP calls are affected, they
+are primarily marginal, low-confidence calls between hetero- and homozygosity.
+
+% TODO: Something about \citet{Hach2012}. What is their method doing?
+
 Decreasing the entropy of quality scores while retaining accuracy is an
-worthwhile endeavor, but difficult given that both the algorithms that
-generate them and the algorithms that are informed by them are moving targets.
+important goal, but successful lossy compression demands an understanding of
+what is lost. For example, lossy audio compression (e.g. MP3) is grounded in
+psychoacoustic principles, preferentially discarding the least perceptible
+sound. Conjuring a similarly principled method for NGS quality scores is
+difficult given that both the algorithms that generate them and the algorithms
+that are informed by them are moving targets. In the analysis by
+\citet{Kozanitis2011}, the authors are appropriately cautious in interpreting
+their results, pointing our that ``there are dozens of downstream applications
+and much work needs to be done to ensure that coarsely quantized quality
+values will be acceptable for users.''
+
+
+% Quip to the rescue!
+
+
+Though the method we propose here is entirely lossless, it is suitably general
+so that any lossy transformation applied upstream of compression can be
+automatically exploited.
+
 
 
 \section{Methods}
@@ -94,6 +121,13 @@ generate them and the algorithms that are informed by them are moving targets.
 \subsection{Reference Based Compression}
 
 \subsection{Statistical Compression with Arithmetic Coding}
+
+Entropy coding is a particularly elegant means of compression in that it
+distinctly separates modeling and encoding. In Quip, the same arithmetic coder
+is used to encode quality scores, read identifiers, nucleotide sequences, and
+alignment information, but with very different statistical models for each.
+
+
 
 \subsubsection{Read Identifiers}
 
@@ -103,6 +137,27 @@ generate them and the algorithms that are informed by them are moving targets.
 
 
 \subsection{Probabalistic De Bruijn Graph Assembly}
+
+
+Counting $k$-mers efficiently with the help of Bloom filters was explored by
+\citet{Melsted2011}.
+
+
+
+Concurrently with our work, \citet{Pell2011} have also developed a
+probabilistic De Bruijn graph assembler using a (non-counting) Bloom filter.
+While they demonstrate a significant reduction in memory use, unlike other De
+Bruijn graph assemblers, only the presence or absence of a k-mer is stored, not
+its abundance, which is essential information when the goal is producing
+accurate contigs. Nevertheless, their analysis suggests errors introduced by
+false-positives in the Bloom filter are low when compared to sequencing
+errors. This does not directly apply to the data structure used here, but in
+Section XXX we demonstrate that the false-positive rate the dlCBF can be kept
+exceedingly low, while using a little as an 20\% of the memory of a
+particularly space-efficient hash table.
+
+
+
 
 % Though probabilistic data structures are 
 
@@ -127,6 +182,10 @@ generate them and the algorithms that are informed by them are moving targets.
 \end{figure*}
 
 \subsection{Reference-based Compression of Aligned Reads}
+
+Reference-based compression was first proposed by \citet{Hsi-YangFritz2011}
+and later implemented in the cramtools package. This technique has also been explored
+by 
 
 \subsection{Characteristics of the d-left Counting Bloom Filter}
 
@@ -154,7 +213,7 @@ this with dlCBF tables of increasing sizes. Upon insertion, a false positive
 occurs when the hash functions computed on the inserted $k$-mer collide with a
 previously inserted $k$-mer. An insertion may also fail when a fixed size
 table is filled to capacity and no empty cells are available. For simplicity,
-we count these occurrences as ``false positives''. Run time and maximum memory
+we count these occurrences also as ``false positives''. Run time and maximum memory
 usage were both recorded using the Unix time command.
 
 \begin{figure}[h]
@@ -198,8 +257,10 @@ efficiency de novo assembly.
 % We are doing de novo assembly faster than gzip can compress!!
 % DSRC support random access, but there is never a need for this with FASTQ.
 
+% Lempel-Ziv is ill-suited to NGS data
+
 The Lempel-Ziv algorithm, particularly as implemented in gzip/libz has become
-a standard choice for compression. The zlib library has matured and stabilized
+a reasonable default choice for compression. The zlib library has matured and stabilized
 over the course of two decades and is widely available. The BAM and Goby
 formats both use zlib for compression, and compressing FASTQ files with gzip
 is still common practice. Despite its ubiquity, our benchmarks show that it is
@@ -210,23 +271,39 @@ gains in decompression time do not make up for its shortcomings.
 Using a more sophisticated variation, the Lempel-Ziv-Markov algorithm
 implemented in xz results in a significant increase in compression, but at the
 cost of tremendously slow compression (often an entire day is required to
-compress a single lane from a HiSeq 2000). This is not a great surprise. The
+compress a single lane from a HiSeq 2000). This is not a great surprise: the
 Lempel-Ziv algorithm works by matching repeated substrings in the input
-stream; an extremely effective technique for compressing text. When the data
-is not so highly structured, this technique breaks down.
+stream; This is an extremely effective technique for compressing text, but
+when the data is not so highly structured, it breaks down.
 
 %% Something else here?
 
-Our use of high-order Markov chain models and de novo assembly results in a
-program that uses significantly more memory than the others tested. Though
-limiting the memory used by a general purpose compression program enables it
-to be used on a wider variety of systems, this is less important in this
-domain-specific application. Common analysis of next-generation sequencing
-data, whether it be alignment, assembly, isoform quantification, peak calling,
-or SNP calling all require significant computational resources. Targeting
-low-memory systems would not be of particular benefit: next-generation
-sequencing precludes previous-generation hardware.
 
+% Memory/Time Usage
+
+Our use of high-order Markov chain models and de novo assembly results in a
+program that uses significantly more memory than the others tested, with the
+exception of cramtools. Though limiting the memory used by a general purpose
+compression program enables it to be used on a wider variety of systems, this
+is less important in this domain-specific application. Common analysis of
+next-generation sequencing data, whether it be alignment, assembly, isoform
+quantification, peak calling, or SNP calling all require significant
+computational resources. Targeting low-memory systems would not be of
+particular benefit: next-generation sequencing precludes previous-generation
+hardware.
+
+Though memory consumption is not a top priority, runtime is important. Newer
+instruments like the HiSeq 2000 produce far more data per lane than previously
+possible. And, as the cost of sequencing continues to decrease, experiments
+will involve more conditions, replicates, and timepoints.  Quip is able to
+compress NGS data at three times the speed of gzip, while performing de novo
+assembly of millions of reads, and up to five times as fast without the
+assembly step. Only DSRC is faster, but with consistently lower compression.
+In addition, our reference-based compression algorithm is nearly twice as fast
+as cramtools, with substantially better lossless compression.
+
+
+% Conclusion
 
 \bibliographystyle{plainnat}
 \bibliography{quip}

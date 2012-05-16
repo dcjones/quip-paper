@@ -52,7 +52,7 @@
   7217773725 quip.comp/4_2.fastq.quip
   4939058044 quip.comp/5_1.fastq.quip
   4848211081 quip.comp/5_2.fastq.quip
-  1970145014 quip.comp/6.fastq.quip
+  1928215268 quip.comp/6.fastq.quip
    734351316 quip.comp/7_1.fastq.quip
    765573485 quip.comp/7_2.fastq.quip
   3198428768 quip-quick.comp/1.fastq.quip
@@ -63,7 +63,7 @@
   7314519359 quip-quick.comp/4_2.fastq.quip
   5045156746 quip-quick.comp/5_1.fastq.quip
   4952422935 quip-quick.comp/5_2.fastq.quip
-  2140635709 quip-quick.comp/6.fastq.quip
+  2104307290 quip-quick.comp/6.fastq.quip
    873968546 quip-quick.comp/7_1.fastq.quip
    903417444 quip-quick.comp/7_2.fastq.quip
   4377812396 xz.comp/1.fastq.xz
