@@ -55,19 +55,23 @@ relatively efficient random access.
 % Referenced-based compression
 
 The fundamental characteristic of NGS data is that it consists of millions of
-fragments of greater whole, whether it be a genome sequence or splices mRNA
-sequences. This realization led \cite{Hsi-YangFritz2011}
+fragments of greater whole, whether it be a genome sequence or spliced mRNA
+transcripts. This realization led \citet{Kozanitis2011}
+
+ This realization led \cite{Hsi-YangFritz2011}
 
 
 
 %% TODO: Fritz, et al
 
-This idea is explored also in the Goby format \citep{Goby2012}, in which the
-sequences of aligned reads are not stored but looked up in a reference genome
-when needed. For some applications reference- based compression can be taken
-much further by storing only SNP information, summarizing a sequencing
-experiment in mere kilobytes \citep{Christley2009}. However, even in these
-cases, discarding the raw reads would prevent any reanalysis of the data.
+This idea is explored also in the Goby format \citep{Goby2012}, which has been
+proposed an an alternative to SAM/BAM, the primary functional difference being
+that sequences of aligned reads are not stored but looked up in a reference
+genome when needed. For some applications reference-based compression can be
+taken much further by storing only SNP information, summarizing a sequencing
+experiment in mere kilobytes \citep{Christley2009}. However, even when SNP
+calls are all that is needed, discarding the raw reads would prevent any
+reanalysis of the data.
 
 
 % Lossy compression of quality scores
@@ -111,23 +115,19 @@ values will be acceptable for users.''
 
 
 Though the method we propose here is entirely lossless, it is suitably general
-so that any lossy transformation applied upstream of compression can be
-automatically exploited.
-
+(as is any method based on entropy encoding) so that any lossy transformation
+applied upstream of compression can be automatically exploited.
 
 
 \section{Methods}
 
-\subsection{Reference Based Compression}
-
 \subsection{Statistical Compression with Arithmetic Coding}
 
-Entropy coding is a particularly elegant means of compression in that it
-distinctly separates modeling and encoding. In Quip, the same arithmetic coder
-is used to encode quality scores, read identifiers, nucleotide sequences, and
-alignment information, but with very different statistical models for each.
-
-
+Entropy encoding is a particularly elegant means of compression in that it
+allows a distinct separation between modeling and encoding. In Quip, the same
+arithmetic coder is used to encode quality scores, read identifiers,
+nucleotide sequences, and alignment information, but with very different
+statistical models for each.
 
 \subsubsection{Read Identifiers}
 
@@ -136,13 +136,20 @@ alignment information, but with very different statistical models for each.
 \subsubsection{Quality Scores}
 
 
-\subsection{Probabalistic De Bruijn Graph Assembly}
+\subsection{Reference Based Compression}
+
+\subsection{Assembly Based Compression}
+
+% This can be thought of as generalization of the Lempel-Ziv algorithm, whereas,
+% rather than attempting to match strings to previous occurrences, we match strings
+% to contigs  ...
+
+
+\subsubsection{Probabalistic De Bruijn Graph Assembly}
 
 
 Counting $k$-mers efficiently with the help of Bloom filters was explored by
 \citet{Melsted2011}.
-
-
 
 Concurrently with our work, \citet{Pell2011} have also developed a
 probabilistic De Bruijn graph assembler using a (non-counting) Bloom filter.
@@ -155,9 +162,6 @@ errors. This does not directly apply to the data structure used here, but in
 Section XXX we demonstrate that the false-positive rate the dlCBF can be kept
 exceedingly low, while using a little as an 20\% of the memory of a
 particularly space-efficient hash table.
-
-
-
 
 % Though probabilistic data structures are 
 

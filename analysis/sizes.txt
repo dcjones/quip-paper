@@ -72,4 +72,9 @@
   3715503064 xz.comp/3.fastq.xz
   9765695804 xz.comp/4_1.fastq.xz
   9663045380 xz.comp/4_2.fastq.xz
-435988547611 total
+  3126918830 cramtools.comp/1.relabel.bam.cramtools
+  7862586752 cramtools.comp/2.relabel.bam.cramtools
+  2379993229 cramtools.comp/3.relabel.bam.cramtools
+ 16057053550 cramtools.comp/4.relabel.bam.cramtools
+ 10505222459 cramtools.comp/5.relabel.bam.cramtools
+  1903287837 cramtools.comp/6.relabel.bam.cramtools
