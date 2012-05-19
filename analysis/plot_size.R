@@ -8,6 +8,7 @@ xs <- read.table("sizes.csv", sep = ",", header = T)
 
 xs$prog <- as.character(xs$prog)
 xs$prog[xs$prog == "quip"]       <- "quip -a"
+xs$prog[xs$prog == "quip-ref"] <- "quip -r"
 xs$prog[xs$prog == "quip-quick"] <- "quip"
 
 xs$prog <- factor(xs$prog,
@@ -19,7 +20,8 @@ xs$prog <- factor(xs$prog,
         "dsrc",
         "cramtools",
         "quip",
-        "quip -a"))
+        "quip -a",
+        "quip -r"))
 
 
 # png("sizes.png", width = 900, height = 300)

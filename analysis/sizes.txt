@@ -22,6 +22,11 @@
   3738880507 bzip2.comp/3.fastq.bzip2
   9651781092 bzip2.comp/4_1.fastq.bzip2
   9549918057 bzip2.comp/4_2.fastq.bzip2
+  6858742918 bzip2.comp/5_1.fastq.bzip2
+  6742141690 bzip2.comp/5_2.fastq.bzip2
+  3346482478 bzip2.comp/6.fastq.bzip2
+  1274269325 bzip2.comp/7_1.fastq.bzip2
+  1313224074 bzip2.comp/7_2.fastq.bzip2
   3991130814 dsrc.comp/1.fastq.dsrc
   4491942148 dsrc.comp/2_1.fastq.dsrc
   4219082415 dsrc.comp/2_2.fastq.dsrc
@@ -44,34 +49,45 @@
   4403494851 gzip.comp/6.fastq.gzip
   1562288733 gzip.comp/7_1.fastq.gzip
   1603901369 gzip.comp/7_2.fastq.gzip
-  3024593552 quip.comp/1.fastq.quip
-  3781900438 quip.comp/2_1.fastq.quip
-  3570287487 quip.comp/2_2.fastq.quip
-  2697147809 quip.comp/3.fastq.quip
-  7309260982 quip.comp/4_1.fastq.quip
-  7217773725 quip.comp/4_2.fastq.quip
-  4939058044 quip.comp/5_1.fastq.quip
-  4848211081 quip.comp/5_2.fastq.quip
-  1928215268 quip.comp/6.fastq.quip
-   734351316 quip.comp/7_1.fastq.quip
-   765573485 quip.comp/7_2.fastq.quip
-  3198428768 quip-quick.comp/1.fastq.quip
-  3818121152 quip-quick.comp/2_1.fastq.quip
-  3605473715 quip-quick.comp/2_2.fastq.quip
-  2728258702 quip-quick.comp/3.fastq.quip
-  7406597993 quip-quick.comp/4_1.fastq.quip
-  7314519359 quip-quick.comp/4_2.fastq.quip
-  5045156746 quip-quick.comp/5_1.fastq.quip
-  4952422935 quip-quick.comp/5_2.fastq.quip
-  2104307290 quip-quick.comp/6.fastq.quip
-   873968546 quip-quick.comp/7_1.fastq.quip
-   903417444 quip-quick.comp/7_2.fastq.quip
+  3005223537 quip.comp/1.fastq.quip
+  3784380627 quip.comp/2_1.fastq.quip
+  3584640204 quip.comp/2_2.fastq.quip
+  2692914874 quip.comp/3.fastq.quip
+  7311267116 quip.comp/4_1.fastq.quip
+  7242942685 quip.comp/4_2.fastq.quip
+  4939775739 quip.comp/5_1.fastq.quip
+  4859609619 quip.comp/5_2.fastq.quip
+  1917310740 quip.comp/6.fastq.quip
+   727438741 quip.comp/7_1.fastq.quip
+   758435470 quip.comp/7_2.fastq.quip
+  3178442457 quip-quick.comp/1.fastq.quip
+  3821482476 quip-quick.comp/2_1.fastq.quip
+  3621171823 quip-quick.comp/2_2.fastq.quip
+  2723815792 quip-quick.comp/3.fastq.quip
+  7410037072 quip-quick.comp/4_1.fastq.quip
+  7341261577 quip-quick.comp/4_2.fastq.quip
+  5060058641 quip-quick.comp/5_1.fastq.quip
+  4979402919 quip-quick.comp/5_2.fastq.quip
+  2103474176 quip-quick.comp/6.fastq.quip
+   848694574 quip-quick.comp/7_1.fastq.quip
+   878102382 quip-quick.comp/7_2.fastq.quip
+  2379267191 quip-ref.comp/1.relabel.bam.quip-ref
+  5262837959 quip-ref.comp/2.relabel.bam.quip-ref
+  1819029253 quip-ref.comp/3.relabel.bam.quip-ref
+ 10807367546 quip-ref.comp/4.relabel.bam.quip-ref
+  7056493755 quip-ref.comp/5.relabel.bam.quip-ref
+  1385781631 quip-ref.comp/6.relabel.bam.quip-ref
   4377812396 xz.comp/1.fastq.xz
   5023020464 xz.comp/2_1.fastq.xz
   4753461656 xz.comp/2_2.fastq.xz
   3715503064 xz.comp/3.fastq.xz
   9765695804 xz.comp/4_1.fastq.xz
   9663045380 xz.comp/4_2.fastq.xz
+  6815024612 xz.comp/5_1.fastq.xz
+  6692330736 xz.comp/5_2.fastq.xz
+  2995100936 xz.comp/6.fastq.xz
+  1128564184 xz.comp/7_1.fastq.xz
+  1163329960 xz.comp/7_2.fastq.xz
   3126918830 cramtools.comp/1.relabel.bam.cramtools
   7862586752 cramtools.comp/2.relabel.bam.cramtools
   2379993229 cramtools.comp/3.relabel.bam.cramtools

@@ -6,6 +6,14 @@ source("sample_labels.R")
 
 xs <- read.table("comp_time.csv", sep = ",", header = T)
 
+
+xs$prog <- factor(xs$prog)
+
+xs$prog <- as.character(xs$prog)
+xs$prog[xs$prog == "quip"]       <- "quip -a"
+xs$prog[xs$prog == "quip-ref"] <- "quip -r"
+xs$prog[xs$prog == "quip-quick"] <- "quip"
+
 xs$prog <- factor(xs$prog,
     levels = c(
         "gzip",
@@ -14,8 +22,10 @@ xs$prog <- factor(xs$prog,
         "sra",
         "dsrc",
         "cramtools",
-        "quip-quick",
-        "quip"))
+        "quip",
+        "quip -a",
+        "quip -r"))
+
 
 
 # png("comp_time.png", width = 900, height = 300)
@@ -30,13 +40,15 @@ p <- qplot(
     stat  = "identity",
     geom  = "bar")
 
-p <- p + facet_grid(. ~ samp, labeller = sample_labeller)
+#p <- p + facet_grid(. ~ samp, labeller = sample_labeller)
+p <- p + facet_grid(. ~ samp)
 p <- p + theme_dcjstd()
 
-cs <- rainbow_hcl(n = 6, c = 60, l = 50)
+n <- length(levels(xs$prog))
+cs <- rainbow_hcl(n = n, c = 60, l = 50)
 p <- p + scale_color_manual(values = cs, guide = "none")
 
-cs <- rainbow_hcl(n = 6, c = 60, l = 70)
+cs <- rainbow_hcl(n = n, c = 60, l = 70)
 p <- p + scale_fill_manual(values = cs, guide = "none")
 
 p <- p + scale_x_discrete("Algorithm")
