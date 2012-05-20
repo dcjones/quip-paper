@@ -29,7 +29,7 @@ xs$prog <- factor(xs$prog,
 
 
 # png("comp_time.png", width = 900, height = 300)
-pdf("comp_time.pdf", width = 12, height = 3)
+pdf("comp_time.pdf", width = 12, height = 2.5)
 
 p <- qplot(
     data  = xs,
@@ -40,21 +40,19 @@ p <- qplot(
     stat  = "identity",
     geom  = "bar")
 
-#p <- p + facet_grid(. ~ samp, labeller = sample_labeller)
-p <- p + facet_grid(. ~ samp)
+p <- p + facet_grid(. ~ samp, labeller = sample_labeller)
 p <- p + theme_dcjstd()
 
 n <- length(levels(xs$prog))
-cs <- rainbow_hcl(n = n, c = 60, l = 50)
-p <- p + scale_color_manual(values = cs, guide = "none")
+cs_col <- rainbow_hcl(n = n, c = 60, l = 60)
+p <- p + scale_color_manual(values = cs_col, guide = "none")
 
-cs <- rainbow_hcl(n = n, c = 60, l = 70)
-p <- p + scale_fill_manual(values = cs, guide = "none")
+cs_fil <- rainbow_hcl(n = n, c = 60, l = 70)
+p <- p + scale_fill_manual(values = cs_fil, guide = "none")
 
 p <- p + scale_x_discrete("Algorithm")
 p <- p + scale_y_continuous("Compression Speed (MB/s)")
-
-p <- p + opts(axis.text.x=theme_text(angle=45))
+p <- p + coord_flip()
 
 print(p)
 

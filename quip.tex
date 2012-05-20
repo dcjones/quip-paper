@@ -7,7 +7,7 @@
 \usepackage{graphicx}
 
 \title{Compression of next-generation sequencing reads aided by highly efficient de novo assembly}
-\author{Daniel C. Jones}
+\author{Daniel C. Jones, Walter L. Ruzzo, Xinxia Peng, Michael G. Katze}
 
 \begin{document}
 
@@ -183,6 +183,26 @@ particularly space-efficient hash table.
 \caption{TODO}
 \label{fig:comp_decomp_time}
 \end{figure*}
+
+\begin{table}
+\centerline{
+\begin{tabular}{lrr}
+          & \multicolumn{2}{c}{\textsf{Average Memory Usage (MB)}} \\
+          & \textsf{Compression} & \textsf{Decompression} \\
+\textsf{gzip}      & 0.8         & 0.7    \\
+\textsf{bzip2}     & 7.0         & 4.0    \\
+\textsf{xz}        & 96.2        & 9.0    \\
+\textsf{sra}       & NA          &        \\
+\textsf{dsrc}      & 28.3        & 15.1   \\
+\textsf{cramtools} & 10847.6     & 9647.2 \\
+\textsf{quip}      & 412.1       & 412.9  \\
+\textsf{quip -a}   & 823.0                \\
+\textsf{quip -r}   & 
+\end{tabular}
+}
+\caption{TODO}
+\label{tab:mem_usage}
+\end{table}
 
 \subsection{Reference-based Compression of Aligned Reads}
 

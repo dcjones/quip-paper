@@ -6,6 +6,11 @@ source("sample_labels.R")
 
 xs <- read.table("decomp_time.csv", sep = ",", header = T)
 
+xs$prog <- as.character(xs$prog)
+xs$prog[xs$prog == "quip"]       <- "quip -a"
+xs$prog[xs$prog == "quip-ref"] <- "quip -r"
+xs$prog[xs$prog == "quip-quick"] <- "quip"
+
 xs$prog <- factor(xs$prog,
     levels = c(
         "gzip",
@@ -13,12 +18,14 @@ xs$prog <- factor(xs$prog,
         "xz",
         "sra",
         "dsrc",
-        "quip-quick",
-        "quip"))
+        "cramtools",
+        "quip",
+        "quip -a",
+        "quip -r"))
 
 
 # png("decomp_time.png", width = 900, height = 300)
-pdf("decomp_time.pdf", width = 12, height = 3)
+pdf("decomp_time.pdf", width = 12, height = 2.5)
 
 p <- qplot(
     data  = xs,
@@ -32,16 +39,16 @@ p <- qplot(
 p <- p + facet_grid(. ~ samp, labeller = sample_labeller)
 p <- p + theme_dcjstd()
 
-cs <- rainbow_hcl(n = 6, c = 60, l = 50)
-p <- p + scale_color_manual(values = cs, guide = "none")
+cs_col <- rainbow_hcl(n = 6, c = 60, l = 60)
+p <- p + scale_color_manual(values = cs_col, guide = "none")
 
-cs <- rainbow_hcl(n = 6, c = 60, l = 70)
-p <- p + scale_fill_manual(values = cs, guide = "none")
+cs_fil <- rainbow_hcl(n = 6, c = 60, l = 70)
+p <- p + scale_fill_manual(values = cs_fil, guide = "none")
 
 p <- p + scale_x_discrete("Algorithm")
 p <- p + scale_y_continuous("Decompression Speed (MB/s)")
+p <- p + coord_flip()
 
-p <- p + opts(axis.text.x=theme_text(angle=45))
 
 print(p)
 

@@ -35,10 +35,10 @@ for fn in glob("*.decomp.csv"):
     for line in open(fn):
         row = line.strip().split(",")
 
-        samp = re.match(r"(\d+)(_\d+)?\.fastq", row[0]).group(1)
+        samp = re.match(r"(\d+)(_\d+)?\.(fastq|relabel\.bam)", row[0]).group(1)
         time = row[1]
         # Note: divide by four to overcome a strange bug in GNU time.
-        mem  = float(row[2]) / 4 
+        mem  = float(row[2]) / 4
 
         times[prog][samp] += float(time)
         mems[prog][samp].append(float(mem))
