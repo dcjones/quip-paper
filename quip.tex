@@ -17,38 +17,50 @@
 
 \section{Abstract}
 
-We present Quip, an extremely efficient compression algorithm for
-high-throughput sequencing data.  We use reference-based compression for aligned
-reads in the SAM/BAM format to avoid storing redundant sequences.  Unaligned
-reads are assembled into contigs using an novel de novo assembly algorithm that
-far more space efficient than traditional assemblers.  Read identifiers and
-quality scores are compressed using arithmetic coding with straightforward
-statistical modeling.
+We present Quip, a compression algorithm for next-generation sequencing data
+in the FASTQ and SAM/BAM formats. Reference-based compression is used to store
+aligned reads compactly, as positions within an external sequence database.
+Unaligned reads are further compressed by performing de novo assembly, and
+storing sequences as positions within assembled contigs. To do so, we
+developed a novel assembly algorithm which uses a probabilistic data structure
+to greatly reduce the memory required by traditional De Bruijn graph
+assemblers. This is combined with efficient statistical compression of read
+identifiers, quality scores, alignment information, and sequences, effectively
+collapsing very large datasets to less that 15\% of their original size.
 
 Availability: Quip is freely available under an open-source license from
 \url{http://cs.washington.edu/homes/dcjones/quip}.
 
-
 \section{Introduction}
 
-% Some blathering about NGS
+Next-generation sequencing (NGS) blah blah blah...
 
-% Disk storage costs.
+Disk storage costs have decreased dramatically over the past several decades
+but have not kept track of 
 
-% Formats
+A transformative breakthrough in storage technology may occur in the coming
+years, but the age of the \$1000 genome is certain to arrive before that of
+the \$100 petabyte hard disk. Futhermore, as cloud computing and software as a
+service becomes increasingly relevant to molecular biology research, hours
+spend transferring NGS datasets to and from off-site servers for analysis will
+delay meaningful results. In some cases, researchers are forced to maximize
+bandwidth by physically transporting storage media (colloquially, via the
+``sneakernet''); an expensive and logistically complicated option. Even
+moderate gains in domain-specific compression methods will translate into a
+significant reduction in the cost of storage and management over time.
 
-For its simplicity, FASTQ is a surprisingly ill-defined format. The closest
-thing to an accepted specification is the description by \citet{Cock2010}. The
-format arose ad hoc from multiple sources (primarily Sanger and
-Solexa/Illumina), so this specification in descriptive rather than
-prescriptive.
-
-The SAM format is both more complex and more tightly defined, and comes with a
-reference implementation in the form of SAMtools \citep{Li2009b}. It is able to
-store alignment information in addition to read identifiers, sequences, and
-quality scores. In addition, SAM files can be converted to the BAM format, a
-compressed binary version of SAM, which is far more compact and allows for
-relatively efficient random access. 
+Storage and analysis of NGS data centers primarily around two formats that
+have arisen as de facto standards: FASTQ and SAM/BAM. For its simplicity,
+FASTQ is a surprisingly ill-defined format. The closest thing to an accepted
+specification is the description by \citet{Cock2010}. The format arose ad hoc
+from multiple sources (primarily Sanger and Solexa/Illumina), so this
+specification in descriptive rather than prescriptive. The SAM format is far
+more complex but also more tightly defined, and comes with a reference
+implementation in the form of SAMtools \citep{Li2009b}. It is able to store
+alignment information in addition to read identifiers, sequences, and quality
+scores. Plain text, tab-delimited SAM files can also be converted to the BAM
+format, a compressed binary version of SAM, which is far more compact and
+allows for relatively efficient random access.
 
 % DNA Compression
 
@@ -197,7 +209,7 @@ We have also implemented lossless reference-based compression. Given aligned
 reads in the SAM or BAM formats, and the sequence to which they are aligned
 (in the FASTA format), the reads are compressed preserving all information in
 the SAM/BAM file, including the header, read IDs, alignment information, and
-any optional fields allowed by the SAM format.
+all optional fields allowed by the SAM format.
 
 
 \subsection{Assembly-Based Compression}
@@ -205,7 +217,7 @@ any optional fields allowed by the SAM format.
 While a reference-based approach typically results in superior compression it
 has a number of disadvantages. Most evidently, an appropriate reference
 sequence database is not always available, particularly in the case of metagenomic
-sequencing. One could be contrived by compiling a set of genomes from species
+sequencing. One could beccontrived by compiling a set of genomes from species
 expected to be represented in the sample. However, a high degree of expertise
 is required to curate and manage such project-dependent a database. Secondly,
 there is the practical concern that files compressed with a reference-based
@@ -402,7 +414,9 @@ quip -a         & Quip with assembly-based compression \\
 quip -r         &
 Quip with reference-reference based compression \\
 \end{tabular}
-\caption{Methods evaluated in Section \ref{section:results}.}
+\caption{Methods evaluated in Section \ref{section:results}.
+All methods compared are lossless, with the exception of cramtools which
+does not preserve the original read identifiers.}
 \label{tab:methods}
 \end{table}
 
@@ -549,6 +563,17 @@ accuracy.'' Overall, this data structure appears particularly adept for high
 efficiency de novo assembly.
 
 \section{Discussion}
+
+Compared to the only other published and freely-available reference-based
+compressor, Cramtools, we see a significant reduction in compressed file size,
+despite read identifiers being discarded by Cramtools and retained by Quip.
+This is combined with dramatically reduced memory usage, faster compression
+and decompression, and increased flexibility (e.g. Quip is able to store
+multiple alignments of the same read and does not require that the BAM file be
+sorted or indexed). Conversely, Cramtools implements some potentially very
+useful lossy methods not provided by Quip. For example, a number of options
+are available for selectively discarding quality scores that are deemed
+unnecessary.
 
 %% Points to make
 % We are doing de novo assembly faster than gzip can compress!!
