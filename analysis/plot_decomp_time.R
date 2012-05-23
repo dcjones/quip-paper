@@ -6,6 +6,9 @@ source("sample_labels.R")
 
 xs <- read.table("decomp_time.csv", sep = ",", header = T)
 
+xs <- subset(xs, samp != "2")
+xs$samp <- factor(xs$samp, levels = c("4", "5", "3", "1", "6", "7"))
+
 xs$prog <- as.character(xs$prog)
 xs$prog[xs$prog == "quip"]       <- "quip -a"
 xs$prog[xs$prog == "quip-ref"] <- "quip -r"
@@ -39,10 +42,11 @@ p <- qplot(
 p <- p + facet_grid(. ~ samp, labeller = sample_labeller)
 p <- p + theme_dcjstd()
 
-cs_col <- rainbow_hcl(n = 6, c = 60, l = 60)
+n <- length(levels(xs$prog))
+cs_col <- rainbow_hcl(n = n, c = 60, l = 60)
 p <- p + scale_color_manual(values = cs_col, guide = "none")
 
-cs_fil <- rainbow_hcl(n = 6, c = 60, l = 70)
+cs_fil <- rainbow_hcl(n = n, c = 60, l = 70)
 p <- p + scale_fill_manual(values = cs_fil, guide = "none")
 
 p <- p + scale_x_discrete("Algorithm")

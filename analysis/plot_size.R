@@ -6,6 +6,9 @@ source("sample_labels.R")
 
 xs <- read.table("sizes.csv", sep = ",", header = T)
 
+xs <- subset(xs, samp != "2")
+xs$samp <- factor(xs$samp, levels = c("4", "5", "3", "1", "6", "7"))
+
 xs$prog <- as.character(xs$prog)
 xs$prog[xs$prog == "quip"]       <- "quip -a"
 xs$prog[xs$prog == "quip-ref"] <- "quip -r"

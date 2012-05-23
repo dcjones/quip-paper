@@ -6,6 +6,8 @@ source("sample_labels.R")
 
 xs <- read.table("comp_time.csv", sep = ",", header = T)
 
+xs <- subset(xs, samp != "2")
+xs$samp <- factor(xs$samp, levels = c("4", "5", "3", "1", "6", "7"))
 
 xs$prog <- factor(xs$prog)
 

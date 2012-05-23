@@ -7,7 +7,6 @@
 \usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{graphicx}
-\usepackage{supertabular}
 
 \title{Compression of next-generation sequencing reads aided by highly efficient de novo assembly}
 \author{Daniel C. Jones, Walter L. Ruzzo, Xinxia Peng, Michael G. Katze}
@@ -131,41 +130,152 @@ arithmetic coder is used to encode quality scores, read identifiers,
 nucleotide sequences, and alignment information, but with very different
 statistical models for each.
 
+
 \subsubsection{Read Identifiers}
+
+The only requirement of read identifiers is that they uniquely identify the
+read. A single integer would do, but typically each read comes with complex
+string containing the instrument name, run identifier, flow cell identifier,
+and tile coordinates. Much of this information is the same for every read and
+is simply repeated, inflating the file size.
+
+To compress out this redundancy, we use a form of delta encoding. A simple
+parser tokenizes the ID into separate fields which are then compared to the
+previous ID. Tokens that remain the same from read to read (e.g. instrument
+name) and can be compressed to a negligible amount of space (arithmetic coding
+produces codes of less than 1 bit for such tokens). Numerical token are
+recognized and stored efficiently, either directly or as an offset from the
+same token in the previous read. Otherwise the prefixes of non-identical
+strings are matched before encoding the non-matching suffix.
+
+The end result is that read IDs, which are often 50 bytes or longer, are
+typically stored in 2-3 bytes.
+
 
 \subsubsection{Nucleotide Sequences}
 
+A large literature exists on compression DNA sequences. Genomes 
+often contain regions of extreme redundancy and low complexity, but
+with a structure that is complex and difficult to exploit.
+%% TODO: a few comments on methods used throughout the ages
+
+We however adopt a very simple model based on high-order Markov chains. The
+nucleotide at a given position in a read is predicted using the preceding
+twelve nucleotides. This model uses more memory than traditional general-
+purpose compression algorithms ($4^{13} = 67,108,864$ parameters are needed,
+each represented in 16 bits)  but it is simple and extremely efficient. An
+order-12 Markov chain requires a very large amount of data to train , but
+there is no shortage with sequencing data we wish to compress. After
+compressing several million reads the parameters are tightly fit to the
+nucleotide composition of the dataset so that the remaining reads will be
+highly compressed. Compressing larger files only results in a tighter fit and
+higher compression.
+
+
 \subsubsection{Quality Scores}
 
+It has been previously noted that the quality score at a given position is
+highly correlated with the score at the preceding position
+\citep{Kozanitis2011}. This makes a Markov chain a natural model, but unlike
+nucleotides, quality scores are over a much larger alphabet (usually 41--46
+distinct quality scores are used). This limits the order of the Markov chain:
+long chains will require a great deal of space and take a unrealistic amount
+of data to train.
 
-\subsection{Reference Based Compression}
-
-\subsection{Assembly Based Compression}
-
-% This can be thought of as generalization of the Lempel-Ziv algorithm, whereas,
-% rather than attempting to match strings to previous occurrences, we match strings
-% to contigs  ...
-
-
-\subsubsection{Probabalistic De Bruijn Graph Assembly}
+To limit the number of parameters, we use an order-3 Markov chain, but
+coarsely bin the distal two positions. In addition to the preceding three
+positions, we condition on the position within the read and running count of
+the number large jumps in quality scores between subsequent positions (defined
+as $|q_{i} - q_{i-1}| > 1$), which allows reads with highly variable quality
+scores to be encoded using a separate model. Both of these numbers are binned
+to control the number of parameters.
 
 
-Counting $k$-mers efficiently with the help of Bloom filters was explored by
-\citet{Melsted2011}.
+\subsection{Reference-Based Compression}
+
+We have also implemented lossless reference-based compression. Given aligned
+reads in the SAM or BAM formats, and the sequence to which they are aligned
+(in the FASTA format), the reads are compressed preserving all information in
+the SAM/BAM file, including the header, read IDs, alignment information, and
+any optional fields allowed by the SAM format.
+
+
+\subsection{Assembly-Based Compression}
+
+While a reference-based approach typically results in superior compression it
+has a number of disadvantages. Most evidently, an appropriate reference
+sequence database is not always available, particularly in the case of metagenomic
+sequencing. One could be contrived by compiling a set of genomes from species
+expected to be represented in the sample. However, a high degree of expertise
+is required to curate and manage such project-dependent a database. Secondly,
+there is the practical concern that files compressed with a reference-based
+approach are not self-contained. Decompression requires precisely the same
+reference database used for compression, and if it is lost or forgotten the
+compressed data becomes inaccessible.
+
+To complement the reference-based approach, we developed an assembly-based
+approach which offers some of the advantages of reference-based compression,
+but requires no external sequence database and produces files which are
+entirely self-contained. We use the first (by default) 2.5 million reads to
+assemble contigs which are then used in place of a reference sequence
+database to encode aligned reads compactly as positions.
+
+Once contigs are assembled, read sequences are aligned using a simple ``seed
+and extend'' method: 12-mer seeds are matched using a hash table, and
+candidate alignments are evaluated using the Hamming distance. The best
+(lowest Hamming distance) alignment is chosen, assuming it falls below a given
+cutoff, and the read is encoded as a position within the contig set. Roughly,
+this can be thought of as a derivation of the Lempel-Ziv algorithm: as
+sequences are read, they are matched to previously observed data, or in this
+case, contigs assembled from previously observed data. These contigs are
+not explicitly stored, but rather reassembled during decompression.
+
+
+% Probabalistic de bruijn graphs, etc
+
+De novo assembly is traditionally extremely computationally intensive. The
+most commonly used technique involves constructing a De Bruijn graph, a
+directed graph in which each vertex represents a nucleotide $k$-mer present in
+the data for some fixed $k$ (e.g., $k = 25$ is a common choice). An edge
+between two $k$-mers $u$ and $v$ occurs if and only if the $(k-1)$-mer suffix
+of $u$ is also the prefix of $v$. In principle, given such a graph, an
+assembly can be produced by finding a path through this graph which follows
+each edge exactly once, called an Eulerian path \citep{Pevzner2001}. In
+practice, since NGS data has a non-negligible error rate, assemblers augment
+each vertex with the number of observed occurrences of the $k$-mer and
+leverage these counts using a variety of heuristics to filter out spurious
+paths.
+
+A significant bottleneck of the De Bruijn graph approach is building an
+implicit representation of the graph by counting and storing $k$-mer
+occurrences in a hash table. The assembler implemented in Quip overcomes this
+bottleneck to a large extent by using a data structure based on the Bloom
+filter to count $k$-mers. The Bloom filter \citep{Bloom1970} is a
+probabilistic data structure that represents a set of elements extremely
+compactly, at the cost of introducing a non-zero false positive rate. This
+idea is generalized in the counting Bloom filter, in which an arbitrary count
+can be associated with each element \citep{Fan2000}, and further refined in
+the d-left counting Bloom filter (dlCBF) \citep{Bonomi2006}, which requires
+significantly less space than the already quite space efficient counting Bloom
+filter. We base our assembler on a realization of the dlCBF.
+
+Counting $k$-mers efficiently with the help of Bloom filters was previously
+explored by \citet{Melsted2011}, however it is used in addition, rather than
+in place, of a hash table. The Bloom filter is used as a ``staging area'' to
+store $k$-mers occurring only once, reducing the memory required by the hash
+table. 
 
 Concurrently with our work, \citet{Pell2011} have also developed a
-probabilistic De Bruijn graph assembler using a (non-counting) Bloom filter.
-While they demonstrate a significant reduction in memory use, unlike other De
-Bruijn graph assemblers, only the presence or absence of a k-mer is stored,
-not its abundance, which is essential information when the goal is producing
-accurate contigs. Nevertheless, their analysis suggests errors introduced by
-false-positives in the Bloom filter are low when compared to sequencing
-errors. This does not directly apply to the data structure used here, but in
-Section \ref{section:dlcbf_results} we demonstrate that the false-positive
-rate the dlCBF can be kept exceedingly low, while using a little as an 20\% of
-the memory of a particularly space-efficient hash table.
-
-% Though probabilistic data structures are 
+probabilistic De Bruijn graph assembler but using a non-counting Bloom
+filter. While they demonstrate a significant reduction in memory use, unlike
+other De Bruijn graph assemblers, only the presence or absence of a k-mer is
+stored, not its abundance, which is essential information when the goal is
+producing accurate contigs. Nevertheless, their analysis suggests errors
+introduced by false-positives in the Bloom filter are low when compared to
+sequencing errors. This does not directly apply to the data structure used
+here, but in Section \ref{section:dlcbf_results} we demonstrate that the
+false-positive rate the dlCBF can be kept exceedingly low, while using a
+little as an 20\% of the memory of a particularly space-efficient hash table.
 
 
 \section{Results}
@@ -182,7 +292,7 @@ YangFritz2011}. Other methods have been proposed \citep{Tembe2010,
 Kozanitis2011, Bhola2011, Sakib2011}, but without publicly available software
 we were unable independently evaluate them. We have also restricted our focus
 to lossless compression, and have not evaluated a number of promising lossy
-methods \citep{Hsi-YangFritz2011,Wan2011,Hach2012}. We acquired seven datasets
+methods \citep{Hsi-YangFritz2011,Wan2011,Hach2012}. We acquired six datasets
 (Table \ref{tab:datasets}) from the Sequence Read Archive
 \citep{Leinonen2011}, representing a broad sampling of recent applications of
 next-generation sequencing.
@@ -212,10 +322,11 @@ It is important to note that lossless compression is not the intended goal of
 Cramtools. Though we invoked Cramtools with options to include all quality
 scores (\texttt{--capture-all-quality-scores}), optional tags (\texttt
 {--capture-all- tags}), and retain unaligned reads (\texttt{--include-
-unmapped-reads}), it is unable to store the original read IDs, and after
-decompressing, the quality scores were not entirely identical to their
-original value. This puts it at some advantage when comparing compressed file
-size, as all other programs compared were completely lossless.
+unmapped-reads}), it is unable to store the original read IDs. This puts it at
+advantage when comparing compressed file size, as all other programs compared
+were completely lossless, but as the only other available reference-based
+compression, it is a useful comparison.
+
 
 % Reference-based compression of metagenomic data is not a very good idea.
 
@@ -242,7 +353,7 @@ compression). Indeed, in three datasets, we achieve higher compression without
 the use of a reference sequence. Despite using a similar reference-based
 scheme and discarding read identifiers, compression with Cramtools results in
 significantly larger file size. This is due in part to different encoding
-algorithms: Quip uses Arithmetic Coding while Cramtools uses Huffman and
+algorithms: Quip uses arithmetic coding while Cramtools uses Huffman and
 Golomb coding. But the models used in both are, as a whole, complex and very
 different, so accounting for this difference in file size is non-trivial.
 
@@ -276,26 +387,20 @@ only 400 MB.
 
 \begin{table}
 %% TODO: list versions as well
-\begin{tabular}{ll}
+\begin{tabular}{lp{0.3\textwidth}}
 \textit{Method} & \textit{Description} \\ \hline
-gzip            & General-puprose Lempel-Ziv \\
-bzip2           &
-\begin{minipage}{0.3\textwidth}
-General-purpose Burrows-Wheeler transformation and Huffman Coding
-\end{minipage} \\
-xz              &
-\begin{minipage}{0.3\textwidth}
-General-purpose Lempel-Ziv and Arithmetic Coding
-\end{minipage} \\
-sra             & No published description \\
-dsrc & Markov chains,  with Huffman Coding \\
-cramtools       & Referenced-based, \\
-quip            & Arithmetic Coding \\
+gzip (1.4)      & General-puprose Lempel-Ziv \\
+bzip2 (1.0.6)   &
+General-purpose Burrows-Wheeler transformation and Huffman coding \\
+xz  (5.0.3)     &
+General-purpose Lempel-Ziv and arithmetic coding \\
+sra (2.1.10)           & No published description \\
+dsrc (0.3) & Markov chains,  with Huffman coding \\
+cramtools (0.85-b51)  & Referenced-based, \\
+quip            & Arithmetic coding \\
 quip -a         & Quip with assembly-based compression \\
 quip -r         &
-\begin{minipage}{0.3\textwidth}
-Quip with reference-reference based compression
-\end{minipage} \\
+Quip with reference-reference based compression \\
 \end{tabular}
 \caption{Methods evaluated in Section \ref{section:results}.}
 \label{tab:methods}
@@ -305,17 +410,18 @@ Quip with reference-reference based compression
 \begin{table}
 \begin{tabular}{rllr}
   & \textit{Accession Number} & \textit{Description} & \textit{Size (GB)} \\ \hline
-1 & ERR030867                 & Total RNA            & 19.5 \\
-2 & SRR388891                 & 16S rRNA             & 32.5 \\
-3 & SRR372816                 & Runx2 ChIP-Seq       & 14.6 \\
-4 & SRR400039                 & Whole Genome         & 67.6 \\
-5 & SRR125858                 & Exome                & 55.2 \\
-6 &                           & mRNA                 & 16.4 \\
-7 &                           & Metagenomic DNA      &  8.9 \\
+1 & SRR400039                 & Whole Genome         & 67.6 \\
+2 & SRR125858                 & Exome                & 55.2 \\
+3 & ERR030867                 & Total RNA            & 19.5 \\
+4 & SRR372816                 & Runx2 ChIP-Seq       & 14.6 \\
+5 & ERR030894                 & mRNA                 & 16.4 \\
+6 & SRR359032                 & Metagenomic DNA      &  8.9 \\
 \end{tabular}
-\caption{We evaluated compression on a single lane of sequencing data taken from a broad
-collection of seven studies. Except for (2) and (7), each was generated from human samples.
-File size is shown in gigabytes.}
+\caption{
+We evaluated compression on a single lane of sequencing data taken from a
+broad collection of seven studies. Except for the metagenomic data, each was
+generated from human samples. File size is shown in gigabytes.
+}
 \label{tab:datasets}
 \end{table}
 
@@ -323,7 +429,7 @@ File size is shown in gigabytes.}
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{analysis/sizes.pdf}}
 \caption{
-A single lane from seven sequencing experiments was compressed using each
+A single lane from six sequencing experiments was compressed using each
 method. The size of each compressed file is plotted in proportion to the
 uncompressed file size. Reference-based compression methods were not applied to
 to the metagenomic dataset. These plots are marked ``NA''.
@@ -337,7 +443,10 @@ to the metagenomic dataset. These plots are marked ``NA''.
 \caption{
 The absolute run time of each evaluation was recorded using the Unix time
 command. Compression speed in measured in megabytes of input per second, while
-the decompression speed is in megabytes of output per second.
+the decompression speed is in megabytes of output per second. In the case of
+the reference-based compressors, cramtools and quip -r, output is in the BAM
+format and so these measurements include time spend re-compressing the data
+with zlib.
 }
 \label{fig:comp_decomp_time}
 \end{figure*}
@@ -345,17 +454,17 @@ the decompression speed is in megabytes of output per second.
 \begin{table}
 \centerline{
 \begin{tabular}{lrr}
-                & \multicolumn{2}{c}{\textit{Average Memory Usage (MB)}} \\ \hline
+                & \multicolumn{2}{c}{\textit{Average Memory Usage (MB)}} \\ \cline{2-3}
 \textit{Method} & \textit{Compression} & \textit{Decompression} \\ \hline
 gzip            &     0.8              &    0.7 \\
 bzip2           &     7.0              &    4.0 \\
 xz              &    96.2              &    9.0 \\
 sra             &      NA              &        \\
 dsrc            &    28.3              &   15.1 \\
-cramtools       & 10847.6              & 9647.2 \\
+cramtools       &  6803.8              & 6749.3 \\
 quip            &   412.1              &  412.9 \\
-quip -a         &   823.0                \\
-quip -r         & 
+quip -a         &   823.0              &  794.1 \\
+quip -r         &  1717.0              &
 \end{tabular}
 }
 \caption{
@@ -379,12 +488,14 @@ Though our primary goal is efficient compression of sequencing data, the
 assembly algorithm we developed to achieve this is of independent interest.
 Only very recently has the idea of using probabilistic data structures in
 assembly been breached, and to our knowledge, we are the first to build
-a functioning assembler using the dlCBF.
+a functioning assembler using any version of the counting Bloom filter.
 
-The precise false positive rate of the data structure is unimportant when the
-goal is compression, but if the method is to be extended to perform actual
-analysis, it becomes a serious concern. The false positive rate of a Bloom
-filter can be obtained analytically, though doing so is not entirely trivial.
+The precise false positive rate of the dlCBF data structure is unimportant
+when the goal is compression, but if the method is to be extended to perform
+actual analysis, it becomes a serious concern. The false positive rate of a
+Bloom filter can be obtained analytically, though doing so is not entirely
+trivial.
+%% TODO: can the dlCBF false-positive rate be obtained analystically?
 
 Comparisons of data structure performance are notoriously sensitive to the
 particulars of the implementation. To perform a meaningful benchmark, we
@@ -489,8 +600,17 @@ assembly step. Only DSRC is faster, but with consistently lower compression.
 In addition, our reference-based compression algorithm is nearly twice as fast
 as cramtools, with substantially better lossless compression.
 
-
 % Conclusion
+
+The algorithm implemented in Quip combines an ensemble of powerful techniques
+to probe the limit to which next-generation sequencing data can be compressed,
+yet remains efficient enough to be practical.
+
+\section*{Acknowledgments}
+
+James Bonfield, Matt Mahoney, Seth Hillbrand
+
+% TODO: Etc.
 
 \bibliographystyle{plainnat}
 \bibliography{quip}

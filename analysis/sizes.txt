@@ -59,7 +59,7 @@
   4859609619 quip.comp/5_2.fastq.quip
   1917310740 quip.comp/6.fastq.quip
    727438741 quip.comp/7_1.fastq.quip
-   758435470 quip.comp/7_2.fastq.quip
+   758435469 quip.comp/7_2.fastq.quip
   3178442457 quip-quick.comp/1.fastq.quip
   3821482476 quip-quick.comp/2_1.fastq.quip
   3621171823 quip-quick.comp/2_2.fastq.quip
@@ -69,14 +69,14 @@
   5060058641 quip-quick.comp/5_1.fastq.quip
   4979402919 quip-quick.comp/5_2.fastq.quip
   2103474176 quip-quick.comp/6.fastq.quip
-   848694574 quip-quick.comp/7_1.fastq.quip
+   848694575 quip-quick.comp/7_1.fastq.quip
    878102382 quip-quick.comp/7_2.fastq.quip
-  2379267191 quip-ref.comp/1.relabel.bam.quip-ref
-  5262837959 quip-ref.comp/2.relabel.bam.quip-ref
-  1819029253 quip-ref.comp/3.relabel.bam.quip-ref
- 10807367546 quip-ref.comp/4.relabel.bam.quip-ref
-  7056493755 quip-ref.comp/5.relabel.bam.quip-ref
-  1385781631 quip-ref.comp/6.relabel.bam.quip-ref
+  2623275772 quip-ref.comp/1.uniq.bam.quip-ref
+  5675694444 quip-ref.comp/2.uniq.bam.quip-ref
+  2081920632 quip-ref.comp/3.uniq.bam.quip-ref
+ 11664985082 quip-ref.comp/4.uniq.bam.quip-ref
+  7869544697 quip-ref.comp/5.uniq.bam.quip-ref
+  1645916763 quip-ref.comp/6.uniq.bam.quip-ref
   4377812396 xz.comp/1.fastq.xz
   5023020464 xz.comp/2_1.fastq.xz
   4753461656 xz.comp/2_2.fastq.xz
@@ -88,9 +88,9 @@
   2995100936 xz.comp/6.fastq.xz
   1128564184 xz.comp/7_1.fastq.xz
   1163329960 xz.comp/7_2.fastq.xz
-  3126918830 cramtools.comp/1.relabel.bam.cramtools
-  7862586752 cramtools.comp/2.relabel.bam.cramtools
-  2379993229 cramtools.comp/3.relabel.bam.cramtools
- 16057053550 cramtools.comp/4.relabel.bam.cramtools
- 10505222459 cramtools.comp/5.relabel.bam.cramtools
-  1903287837 cramtools.comp/6.relabel.bam.cramtools
+  3126918830 cramtools.comp/1.uniq.bam.cramtools
+  6810995214 cramtools.comp/2.uniq.bam.cramtools
+  2379993229 cramtools.comp/3.uniq.bam.cramtools
+ 14424799876 cramtools.comp/4.uniq.bam.cramtools
+  8687638497 cramtools.comp/5.uniq.bam.cramtools
+  1903287837 cramtools.comp/6.uniq.bam.cramtools
