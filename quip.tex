@@ -345,8 +345,9 @@ We acquired six datasets (Table \ref{tab:datasets}) from the Sequence Read
 Archive \citep{Leinonen2011}, representing a broad sampling of recent
 applications of next-generation sequencing. Genome and exome sequencing data
 was taken from 1000 Genomes Project, total and mRNA data from the Illumina
-BodyMap 2.0 dataset, Runx2 ChIP-Seq performed from prostate cancer cells,
-and metagenomic sequencing (TODO: citations).
+BodyMap 2.0 dataset, Runx2 ChIP-Seq performed from prostate cancer cells, and
+metagenomic sequencing of biofilm found in the extremely acidic drainage from
+the Richmond Mine in California. (TODO: track down citations).
 
 The Sequence Read Archive provides data in its own SRA compression format
 which we also evaluate here. Programs for working with SRA files are provided
@@ -518,23 +519,21 @@ with zlib.
 gzip            &     0.8              &    0.7 \\
 bzip2           &     7.0              &    4.0 \\
 xz              &    96.2              &    9.0 \\
-sra             &      NA              &        \\
+sra             &      NA              &   46.9 \\
 dsrc            &    28.3              &   15.1 \\
 cramtools       &  6803.8              & 6749.3 \\
 quip            &   412.1              &  412.9 \\
 quip -a         &   823.0              &  794.1 \\
-quip -r         &  1717.0              &
+quip -r         &  1710.0              & 1717.2
 \end{tabular}
 }
 \caption{
 Maximum memory usage was recorded for each program and dataset. We list
 the average across datasets of these measurements. For most of the programs,
-memory usage was near constant across datasets. The largest variance was seen
-with Cramtools and Quip with de novo assembly (``quip -a''). Cramtools varied
-between 9.2 GB and 11.5 GB during compression, and from 8.8 to 10.8 GB during
-decompression. Quip varied from 808 to 931 MB in compression and
-decompression when run with de novo assembly.
-}
+memory usage varied by less that 10\% across datasets and well summarized by the mean,
+with the exception of SRA. Decompression used less that 60 MB except in the
+human exome sequencing dataset, in which over 1.4 GB was used. We report the mean
+with this outlier removed.}
 \label{tab:mem_usage}
 \end{table}
 
@@ -610,13 +609,13 @@ Compared to the only other published and freely-available reference-based
 compressor, Cramtools, we see a significant reduction in compressed file size,
 despite read identifiers being discarded by Cramtools and retained by Quip.
 This is combined with dramatically reduced memory usage, comparable run-time
-(slightly faster compression paired with slightly slower decompression), and
-increased flexibility (e.g. Quip is able to store multiple alignments of the
-same read and does not require that the BAM file be sorted or indexed).
-Conversely, Cramtools implements some potentially very useful lossy methods
-not provided by Quip. For example, a number of options are available for
-selectively discarding quality scores that are deemed unnecessary, which
-can significantly reduce compressed file sizes.
+(slightly faster compression paired with varying relative decompression
+speeds), and increased flexibility (e.g. Quip is able to store multiple
+alignments of the same read and does not require that the BAM file be sorted
+or indexed). Conversely, Cramtools implements some potentially very useful
+lossy methods not provided by Quip. For example, a number of options are
+available for selectively discarding quality scores that are deemed
+unnecessary, which can significantly reduce compressed file sizes.
 
 We find that assembly-based compression offers only a small advantage in many
 datasets. Because we assemble a relatively small subset of the data, coverage
