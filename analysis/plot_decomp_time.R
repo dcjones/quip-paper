@@ -16,15 +16,15 @@ xs$prog[xs$prog == "quip-quick"] <- "quip"
 
 xs$prog <- factor(xs$prog,
     levels = c(
-        "gzip",
-        "bzip2",
-        "xz",
-        "sra",
-        "dsrc",
-        "cramtools",
-        "quip",
+        "quip -r",
         "quip -a",
-        "quip -r"))
+        "quip",
+        "cramtools",
+        "dsrc",
+        "sra",
+        "xz",
+        "bzip2",
+        "gzip"))
 
 
 # png("decomp_time.png", width = 900, height = 300)

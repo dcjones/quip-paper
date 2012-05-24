@@ -6,7 +6,7 @@ source("sample_labels.R")
 
 xs <- read.table("sizes.csv", sep = ",", header = T)
 
-xs <- subset(xs, samp != "2")
+xs <- subset(xs, as.character(samp) != "2")
 xs$samp <- factor(xs$samp, levels = c("4", "5", "3", "1", "6", "7"))
 
 xs$prog <- as.character(xs$prog)
@@ -16,15 +16,15 @@ xs$prog[xs$prog == "quip-quick"] <- "quip"
 
 xs$prog <- factor(xs$prog,
     levels = c(
-        "gzip",
-        "bzip2",
-        "xz",
-        "sra",
-        "dsrc",
-        "cramtools",
-        "quip",
+        "quip -r",
         "quip -a",
-        "quip -r"))
+        "quip",
+        "cramtools",
+        "dsrc",
+        "sra",
+        "xz",
+        "bzip2",
+        "gzip"))
 
 
 # png("sizes.png", width = 900, height = 300)

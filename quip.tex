@@ -33,48 +33,59 @@ Availability: Quip is freely available under an open-source license from
 
 \section{Introduction}
 
-Next-generation sequencing (NGS) blah blah blah...
-
-Disk storage costs have decreased dramatically over the past several decades
-but have not kept track of 
+With the development of next-generation sequencing (NGS) technology
+researchers have had to adapt quickly to cope with the vast increase in raw
+data. Experiments which would previously be conducted with microarrays and
+resulted in kilobytes of data, are now performed by sequencing, producing
+gigabytes, and demanding a significant investment in computational
+infrastructure. While the cost of disk storage has also steadily decreased
+over time, it has not matched the dramatic change in the cost of sequencing.
 
 A transformative breakthrough in storage technology may occur in the coming
-years, but the age of the \$1000 genome is certain to arrive before that of
+years, but the era of the \$1000 genome is certain to arrive before that of
 the \$100 petabyte hard disk. Futhermore, as cloud computing and software as a
 service becomes increasingly relevant to molecular biology research, hours
-spend transferring NGS datasets to and from off-site servers for analysis will
-delay meaningful results. In some cases, researchers are forced to maximize
-bandwidth by physically transporting storage media (colloquially, via the
-``sneakernet''); an expensive and logistically complicated option. Even
-moderate gains in domain-specific compression methods will translate into a
-significant reduction in the cost of storage and management over time.
+spent transferring NGS datasets to and from off-site servers for analysis will
+delay meaningful results. More often researchers will be forced to maximize
+bandwidth by physically transporting storage media (via the ``sneakernet''),
+an expensive and logistically complicated option. These difficulties will only
+be amplified as exponentially more sequencing data is generated,  implying
+that even moderate gains in domain-specific compression methods will translate
+into a significant reduction in the cost of managing these massive
+datasets over time.
 
 Storage and analysis of NGS data centers primarily around two formats that
-have arisen as de facto standards: FASTQ and SAM/BAM. For its simplicity,
-FASTQ is a surprisingly ill-defined format. The closest thing to an accepted
-specification is the description by \citet{Cock2010}. The format arose ad hoc
-from multiple sources (primarily Sanger and Solexa/Illumina), so this
-specification in descriptive rather than prescriptive. The SAM format is far
-more complex but also more tightly defined, and comes with a reference
-implementation in the form of SAMtools \citep{Li2009b}. It is able to store
-alignment information in addition to read identifiers, sequences, and quality
-scores. Plain text, tab-delimited SAM files can also be converted to the BAM
-format, a compressed binary version of SAM, which is far more compact and
-allows for relatively efficient random access.
+have arisen recently as de facto standards: FASTQ and SAM. FASTQ stores, in
+addition to nucleotide sequences, a unique identifier for each read and
+quality scores, which encode estimates of the probability that each base is
+correctly called. For its simplicity, FASTQ is a surprisingly ill-defined
+format. The closest thing to an accepted specification is the description by
+\citet{Cock2010}, but the format arose ad hoc from multiple sources (primarily
+Sanger and Solexa/Illumina), so a number of variations exist, particularly in
+how quality scores are encoded. The SAM format is far more complex but also
+more tightly defined, and comes with a reference implementation in the form of
+SAMtools \citep{Li2009b}. It is able to store alignment information in
+addition to read identifiers, sequences, and quality scores. SAM files, which
+are stored in plain text, can also be converted to the BAM format, a
+compressed binary version of SAM, which is far more compact and allows for
+relatively efficient random access.
 
-% DNA Compression
 
-% NGS Compression
+Compression of nucleotide sequences has been the target of some interest, but
+compressing NGS data, made up millions of short fragments of a greater whole,
+presents a very different problem and demands new techniques.
 
-% Referenced-based compression
+Splitting the data into separate contexts for read identifiers, sequences, and
+quality scores and compressing them with the Lempel-Zip algorithm and Huffman
+coding is explored explored by \citet{Tembe2010} and \citet{Deorowicz2011},
+who demonstrate that domain-specific compression can yield significant
+gains over general-purpose programs like gzip and bzip2.
 
-The fundamental characteristic of NGS data is that it consists of millions of
-fragments of greater whole, whether it be a genome sequence or spliced mRNA
-transcripts. This realization led \citet{Kozanitis2011} and \citet{Hsi-
+The fragmentary nature of the data led \citet{Kozanitis2011} and \citet{Hsi-
 YangFritz2011} to propose reference-based compression methods, in which reads
-are aligned to a reference genome sequence, and the position with the genome
-of each read is stored, rather than the read sequence itself. Decompression is
-performed by copying the read sequences from the genome. Though any
+are aligned to a known reference genome sequence. Rather than the nucleotide
+sequence, only the genomic position of the read is stored. Decompression is
+then performed by copying the read sequences from the genome. Though any
 differences from the reference sequence must also be stored, referenced-based
 approaches can achieve much higher compression and they grow increasing
 efficient with longer read lengths, since storing a genomic position requires
@@ -92,16 +103,16 @@ would prevent any reanalysis of the data.
 
 % Lossy compression of quality scores
 
-A reoccurring theme in the  the growing literature on on short read
+Another theme that reoccurs in the the growing literature on on short read
 compression is lossy encoding of sequence quality scores. This follows
 naturally from the realization that quality scores are particularly difficult
 to compress. Unlike read identifiers, which are highly redundant, or
-nucleotide sequences which XXX, quality scores are inconsistently encoded
-between protocols and computational pipelines and are often simply high-
-entropy. It is dissatisfying that metadata (quality scores) should consume
-more space than primary data (nucleotide sequences). Yet, also dissatisfying
-to many researchers is the thought of discarding information without a very
-good understanding of its affect on downstream analysis.
+nucleotide sequences which which contain some structure, quality scores are
+inconsistently encoded between protocols and computational pipelines and are
+often simply high-entropy. It is dissatisfying that metadata (quality scores)
+should consume more space than primary data (nucleotide sequences). Yet, also
+dissatisfying to many researchers is the thought of discarding information
+without a very good understanding of its affect on downstream analysis.
 
 A number of lossy compression algorithms for quality scores have been
 proposed, including various binning schemes to reduce the alphabet size
@@ -127,10 +138,20 @@ values will be acceptable for users.''
 
 % Quip to the rescue!
 
-Though the method we propose here is entirely lossless, it is suitably general
-(as is any method based on entropy encoding) so that any lossy transformation
-applied upstream of compression can be automatically exploited.
+Here we describe Quip, a new lossless compression algorithm which leverages a
+variety of techniques to achieve very high compression over sequencing data of
+many types, yet remains efficient and practical. We have implement this
+approach in a open-source tool that is capable of compressing both BAM/SAM and
+FASTQ files, retaining all information from the original file and ensuring
+data integrity with per-block checksums.
 
+In addition to implementing reference-based compression, we have built, to
+our knowledge, the first assembly-based compressor. Maintaining efficiency
+while assembling millions of short reads required developing a new,
+exceedingly space efficient technique for de novo assembly based on the
+probabilistic counting Bloom filter data structure. Nucleotide sequences and
+quality scores are handled using carefully tuned statistical compression, and
+read identifiers with a sophisticated delta encoder.
 
 \section{Methods}
 
@@ -397,28 +418,43 @@ millions more reads to the assembled contigs, and memory usage is increased by
 only 400 MB.
 
 
-\begin{table}
-%% TODO: list versions as well
-\begin{tabular}{lp{0.3\textwidth}}
-\textit{Method} & \textit{Description} \\ \hline
-gzip (1.4)      & General-puprose Lempel-Ziv \\
-bzip2 (1.0.6)   &
-General-purpose Burrows-Wheeler transformation and Huffman coding \\
-xz  (5.0.3)     &
-General-purpose Lempel-Ziv and arithmetic coding \\
-sra (2.1.10)           & No published description \\
-dsrc (0.3) & Markov chains,  with Huffman coding \\
-cramtools (0.85-b51)  & Referenced-based, \\
-quip            & Arithmetic coding \\
-quip -a         & Quip with assembly-based compression \\
-quip -r         &
+\begin{table*}
+\begin{center}
+\begin{tabular}{lll}
+\textit{Program}     & \textit{Input} & \textit{Methods} \\ \hline
+gzip (1.4)           & Any &
+Lempel-Ziv \\
+
+bzip2 (1.0.6)        & Any &
+Burrows-Wheeler and Lempel-Ziv \\
+
+xz  (5.0.3)          & Any & 
+Lempel-Ziv with arithmetic coding \\
+
+sra (2.1.10)         & FASTQ &
+No published description \\
+
+dsrc (0.3)           & FASTQ &
+Lempel-Ziv and Huffman coding. \\
+
+cramtools (0.85-b51) & BAM &
+Reference-based compression \\
+
+quip (1.1.0)         & FASTQ, SAM, BAM &
+Statistical modeling with arithmetic coding \\
+
+quip -a (1.1.0)      & FASTQ, SAM, BAM &
+Quip with assembly-based compression \\
+
+quip -r (1.1.0) & SAM, BAM &
 Quip with reference-reference based compression \\
 \end{tabular}
 \caption{Methods evaluated in Section \ref{section:results}.
 All methods compared are lossless, with the exception of cramtools which
 does not preserve the original read identifiers.}
+\end{center}
 \label{tab:methods}
-\end{table}
+\end{table*}
 
 
 \begin{table}
@@ -449,6 +485,13 @@ uncompressed file size. Reference-based compression methods were not applied to
 to the metagenomic dataset. These plots are marked ``NA''.
 }
 \label{fig:sizes}
+\end{figure*}
+
+
+\begin{figure*}
+\centerline{\includegraphics[width=\textwidth]{analysis/relative_sizes.pdf}}
+\caption{For uncompressed input files and compressed files produced by each invocation of Quip, we measured the size of read identifiers, sequences, and quality scores in proportion to the total file size.}
+\label{fig:relative_sizes}
 \end{figure*}
 
 \begin{figure*}
@@ -633,9 +676,8 @@ yet remains efficient enough to be practical.
 
 \section*{Acknowledgments}
 
-James Bonfield, Matt Mahoney, Seth Hillbrand
-
-% TODO: Etc.
+We are grateful to James Bonfield, Matt Mahoney, Seth Hillbrand and
+other participants in the Pistoia Alliance Sequence Squeeze competition, whose work inspired many improvements to our own.
 
 \bibliographystyle{plainnat}
 \bibliography{quip}
