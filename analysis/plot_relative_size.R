@@ -27,6 +27,8 @@ xs$grp[xs$grp == "id"] <- "ID"
 xs$grp[xs$grp == "seq"] <- "Sequence"
 xs$grp[xs$grp == "qual"] <- "Quality"
 
+xs$grp <- factor(xs$grp, levels = c("Sequence", "Quality", "ID"))
+
 pdf("relative_sizes.pdf", width = 12, height = 2.5)
 
 p <- qplot(
@@ -35,6 +37,7 @@ p <- qplot(
     y     = size,
     color = grp,
     fill  = grp,
+    fill  = factor(xs$grp, levels = c("ID", "Sequence", "Quality")),
     stat  = "identity",
     geom  = "bar")
 
@@ -46,7 +49,10 @@ cs_col <- rainbow_hcl(n = n, c = 60, l = 60, start = 30)
 p <- p + scale_color_manual(values = cs_col, guide = "none")
 
 cs_fil <- rainbow_hcl(n = n, c = 60, l = 70, start = 30)
-p <- p + scale_fill_manual("Data", values = cs_fil)
+# names(cs_fil) <- c("Sequence", "Quality", "ID")
+p <- p + scale_fill_manual("Data",
+    values = cs_fil,
+    breaks = c("Quality", "ID", "Sequence"))
 
 p <- p + opts(axis.ticks = theme_blank(), axis.text.x = theme_blank())
 

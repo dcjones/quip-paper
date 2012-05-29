@@ -28,7 +28,7 @@ xs$prog <- factor(xs$prog,
 
 
 # png("sizes.png", width = 900, height = 300)
-pdf("sizes.pdf", width = 12, height = 2.5)
+pdf("sizes.pdf", width = 12, height = 3)
 
 p <- qplot(
     data = xs,

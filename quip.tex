@@ -153,7 +153,8 @@ compression algorithm which leverages a variety of techniques to achieve very
 high compression over sequencing data of many types, yet remains efficient and
 practical. We have implement this approach in a open-source tool that is
 capable of compressing both BAM/SAM and FASTQ files, retaining all information
-from the original file and ensuring data integrity with per-block checksums.
+from the original file and ensuring byte-for-byte data integrity with per-
+block checksums.
 
 
 
@@ -338,15 +339,17 @@ Kozanitis2011, Bhola2011}, but without publicly available software we were
 unable independently evaluate them. We have also restricted our focus to
 lossless compression, and have not evaluated a number of promising lossy
 methods \citep{Hsi-YangFritz2011,Wan2011,Hach2012}, nor methods only capable
-of compressing nucleotide sequences \citep{Cox2012}. Table \ref{tab:methods}
-gives an overview of the method evaluated.
+of compressing nucleotide sequences \citep{Cox2012}. We invoked Quip in three
+ways: using only statistical compression (``quip''), using reference-based
+compression (``quip -r''), and finally with assembly-based compression (``quip
+-a''). Table \ref{tab:methods} gives an overview of the method evaluated.
 
 We acquired six datasets (Table \ref{tab:datasets}) from the Sequence Read
 Archive \citep{Leinonen2011}, representing a broad sampling of recent
 applications of next-generation sequencing. Genome and exome sequencing data
 was taken from 1000 Genomes Project, total and mRNA data from the Illumina
 BodyMap 2.0 dataset, Runx2 ChIP-Seq performed from prostate cancer cells, and
-metagenomic sequencing of biofilm found in the extremely acidic drainage from
+metagenomic DNA sequencing of biofilm found in the extremely acidic drainage from
 the Richmond Mine in California. (TODO: track down citations).
 
 The Sequence Read Archive provides data in its own SRA compression format
@@ -358,14 +361,14 @@ not, so we have not measured compression time and memory in this case.
 
 In the case of reference based alignment implemented in Cramtools and Quip, we
 aligned reads from all but the metagenomic data to the GRCh37/hg19 assembly of
-the human genome using Gsnap generating a BAM file. Splice-junction prediction
-was enabled for the two RNA-Seq datasets. In the case of multiple alignments,
-we removed all but the the primary (i.e., highest scoring). Quip is able to
-store secondary alignments, but the version of Cramtools we evaluated was not.
-When the purpose of alignment in simply compactly archiving the the reads,
-secondary alignments have no purpose and merely inflate the file size, but in
-downstream analysis they are often extremely informative and retaining them
-may be desirable in some cases.
+the human genome using Gsnap \citep{Wu2010} generating a BAM file. Splice-
+junction prediction was enabled for the two RNA-Seq datasets. In the case of
+multiple alignments, we removed all but the the primary (i.e., highest
+scoring). Quip is able to store secondary alignments, but the version of
+Cramtools we evaluated was not. When the purpose of alignment in simply
+compactly archiving the the reads, secondary alignments have no purpose and
+merely inflate the file size, but in downstream analysis they are often
+extremely informative and retaining them may be desirable in some cases.
 
 % Cramtools is not lossless! It has a big advantage and is still losing.
 
@@ -384,7 +387,13 @@ With each method we compressed then decompressed each dataset on a server with
 a 2.8Ghz Intel Xeon processor and 64 GB of memory. In addition to recording
 the compressed file size (Figure \ref{fig:sizes}), we measured wall clock run
 time (Figure \ref{fig:comp_decomp_time}) and maximum memory usage (Table
-\ref{tab:mem_usage}) using the Unix \texttt{time} command.
+\ref{tab:mem_usage}) using the Unix \texttt{time} command. We do not include
+the run-time and memory used when mapping the reads for reference-based
+alignment, however, to make compression speeds somewhat comparable, we
+calculate megabytes per second in terms of the original FASTQ file, despite
+the actual input and output being a BAM file. While Quip is able to decompress
+a compressed BAM file directly to FASTQ, Cramtools necessary outputs
+compressed BAM files and so the same is done with Quip.
 
 In the single-genome samples, we find that reference-based compression using
 Quip consistently results in the smallest file size (i.e., highest
@@ -480,7 +489,7 @@ generated from human samples. File size is shown in gigabytes.
 
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{analysis/sizes.pdf}}
+\centerline{\includegraphics[width=\textwidth]{analysis/sizes_tweaked.pdf}}
 \caption{
 A single lane from six sequencing experiments was compressed using each
 method. The size of each compressed file is plotted in proportion to the
@@ -492,14 +501,13 @@ to the metagenomic dataset. These plots are marked ``NA''.
 
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{analysis/relative_sizes.pdf}}
+\centerline{\includegraphics[width=\textwidth]{analysis/relative_sizes_tweaked.pdf}}
 \caption{For uncompressed input files and compressed files produced by each invocation of Quip, we measured the size of read identifiers, sequences, and quality scores in proportion to the total file size.}
 \label{fig:relative_sizes}
 \end{figure*}
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{analysis/comp_time.pdf}}
-\centerline{\includegraphics[width=\textwidth]{analysis/decomp_time.pdf}}
+\centerline{\includegraphics[width=\textwidth]{analysis/comp_decomp_time_tweaked.pdf}}
 \caption{
 The wall clock run-time of each evaluation was recorded using the Unix time
 command. Compression speed in measured in megabytes of input per second, while
