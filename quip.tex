@@ -575,26 +575,29 @@ with this outlier removed.}
 Though our primary goal is efficient compression of sequencing data, the
 assembly algorithm we developed to achieve this is of independent interest.
 Only very recently has the idea of using probabilistic data structures in
-assembly been breached, and to our knowledge, we are the first to build
-a functioning assembler using any version of the counting Bloom filter.
-To elucidate the trade-off made between space and correctness, we performed
-a simple simulation comparing the dlCBF to a hash table.
+assembly been breached, and to our knowledge, we are the first to build a
+functioning assembler using any version of the counting Bloom filter. Data
+structures based on the Bloom filter make a trade-off between space and
+the probability of inserted elements colliding. Tables can be mode arbitrarily
+small at the cost of increasing the number of collisions. To elucidate this
+trade-off we performed a simple simulation comparing the dlCBF to a hash table.
 
-Comparisons of data structures are notoriously sensitive to the
-specifics of the implementation. To perform a meaningful benchmark, we
-compared our dlCBF implementation to the sparsehash library, an open source
-hash table implementation with the expressed goal of maximizing space
-efficiency. Among many other uses, it is the core data structure in the ABySS
+Comparisons of data structures are notoriously sensitive to the specifics of
+the implementation. To perform a meaningful benchmark, we compared our dlCBF
+implementation to the sparsehash library, an open source hash table
+implementation with the expressed goal of maximizing space efficiency. Among
+many other uses, it is the core data structure in the ABySS
 \citep{Simpson2011} and PASHA \citep{Liu2011} assemblers.
 
-We randomly generated 10 million unique 25-mers and inserted them into a hash
-table sized appropriately as to avoid expansion and rehashing. We repeated
-this with dlCBF tables of increasing sizes. Upon insertion, a false positive
-occurs when the hash functions computed on the inserted $k$-mer collide with a
-previously inserted $k$-mer. An insertion may also fail when a fixed size
-table is filled to capacity and no empty cells are available. For simplicity,
-we count these occurrences also as ``false positives''. Wall clock run-time and maximum memory
-usage were both recorded using the Unix time command.
+We randomly generated 10 million unique, uniformly distributed 25-mers and
+inserted them into a hash table, allocated in advance to be of minimal size
+while avoiding resizing and rehashing. We repeated this with dlCBF tables of
+increasing sizes. Upon insertion, a collision occurs when the hash functions
+computed on the inserted $k$-mer collide with a previously inserted $k$-mer.
+An insertion may also fail when a fixed size table is filled to capacity and
+no empty cells are available. For simplicity, we count these occurrences also
+as collisions. Wall clock run-time and maximum memory usage were both recorded
+using the Unix time command.
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=0.5\textwidth]{analysis/dlcbf/benchmark.pdf}}
@@ -610,11 +613,11 @@ memory efficient hash table to do the same.
 We find that with only 20\% of the space of the hash table the dlCBF accrues a
 false positive rate of less than 0.001 (Figure \ref{fig:dlcbf_bench}). While
 the hash table performed the 10 million insertions in 7.34 seconds, it
-required only 4.48 seconds on average for the dlCBF to do the same on a 2.8Ghz
-Intel Xeon processor. Table size did not greatly affect the runtime of the
-dlCBF. The assembler implemented in Quip uses a conservative table size,
-allowing for 100 million unique $k$-mers while retaining a false positive
-rate well below 1\%.
+required only 4.48 seconds on average for the dlCBF to do the same, with both
+simulations run on a 2.8Ghz Intel Xeon processor. Table size did not greatly
+affect the runtime of the dlCBF. The assembler implemented in Quip uses a
+fixed table size, conservatively set to allow for 100 million unique $k$-mers
+while retaining a false positive rate well below 1\%.
 
 Though the authors of sparsehash claim only a 4 bit overhead for each entry,
 and have gone to considerably effort to achieve such efficiency, it still must
@@ -624,7 +627,7 @@ savings we observe. Of course, a 25-mer cannot be uniquely identified with 14
 bits. False positives are thus introduced, yet they are kept at a very low
 rate by the d-left hashing scheme. Multiple hash functions are used
 under this scheme, so that multiple collisions must occur to result in a false
-positive; an infrequent event if reasonably high-quality hash functions are
+positive, an infrequent event if reasonably high-quality hash functions are
 chosen.
 
 A previous analysis of the dlCBF by \citet{Zhang2009} compared it to two other
@@ -651,13 +654,13 @@ We find that assembly-based compression offers only a small advantage in many
 datasets. Because we assemble a relatively small subset of the data, coverage
 is too low when sequencing a large portion of a eukaryotic genome. In
 principle, the assembler used could be scaled to handle exponentially more
-reads, but at the cost of being too computationally intensive to be practical
-for compression. In such cases, the reference-based approach is more
-appropriate. Yet, in the metagenomic dataset we evaluate, where there is no
-obvious reference sequence, nucleotide sequences are reduced in size by over
-40\% (Figure \ref{fig:relative_sizes}). While limited in scope, for certain
-projects assembly-based compression can prove to be invaluable, and algorithm
-devised here makes it a tractable option.
+reads, but at the cost of being increasingly computationally intensive. In
+such cases, the reference-based approach may be more appropriate. Yet, in the
+metagenomic dataset we evaluate, where there is no obvious reference sequence,
+nucleotide sequences are reduced in size by over 40\% (Figure
+\ref{fig:relative_sizes}). While limited in scope, for certain projects
+assembly-based compression can prove to be invaluable, and the algorithm devised
+here makes it a tractable option.
 
 The Lempel-Ziv algorithm, particularly as implemented in gzip/libz has become
 a reasonable default choice for compression. The zlib library has matured and
@@ -704,7 +707,7 @@ Quality scores are encoded in Quip using an algorithm that is suitably
 generate so that lossy transformations (e.g., binning) can be automatically
 exploited, and can be treated as an optional preprocessing step.
 
-Combing reference-based and assembly-based techniques, with carefully tuned
+Combining reference-based and assembly-based techniques, with carefully tuned
 statistical compression, the algorithm presented in Quip probes the limit to
 which next-generation sequencing data can be compressed losslessly, yet
 remains efficient enough be a practical tool when coping with the deluge of
@@ -712,8 +715,10 @@ data that biology research is now presented with.
 
 \section*{Acknowledgments}
 
-We are grateful to James Bonfield, Matt Mahoney, Seth Hillbrand and
-other participants in the Pistoia Alliance Sequence Squeeze competition, whose work inspired many improvements to our own.
+We are grateful to James Bonfield, Matt Mahoney, Seth Hillbrand and other
+participants in the Pistoia Alliance Sequence Squeeze competition, whose work
+inspired many improvements to our own. While preparing the manuscript, Richard
+Green provided useful feedback and suggestions.
 
 \bibliographystyle{plainnat}
 \bibliography{quip}
