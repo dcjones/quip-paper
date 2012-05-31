@@ -152,9 +152,9 @@
      inkscape:window-height="852"
      id="namedview7698"
      showgrid="false"
-     inkscape:zoom="0.71666667"
-     inkscape:cx="714.24908"
-     inkscape:cy="286.22861"
+     inkscape:zoom="1.4333333"
+     inkscape:cx="518.90024"
+     inkscape:cy="146.69373"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -249,100 +249,82 @@
    id="g7888" /><g
    id="g7890" /><g
    id="g7892" /><g
-   id="g7898" /><path
-   d="m 97.34,151.22 106.87,0 0,14.38 -106.87,0 0,-14.38 z"
-   style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none"
-   id="path7908"
-   inkscape:connector-curvature="0" /><text
+   id="g7898" /><text
    transform="scale(1,-1)"
    id="text7910"
-   x="112.84"
+   x="109.64"
    y="-154.82001"><tspan
-     style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+     style="font-size:11.19999981px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      sodipodi:role="line"
      id="tspan7912"
-     x="112.84"
+     x="109.64"
      y="-154.82001">Whole Genome</tspan></text>
 
+
 <g
-   id="g7914" /><path
-   d="m 207.81,151.22 106.87,0 0,14.38 -106.87,0 0,-14.38 z"
-   style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none"
-   id="path7924"
-   inkscape:connector-curvature="0" /><text
+   id="g7914" /><text
    transform="scale(1,-1)"
    id="text7926"
-   x="245.69"
+   x="244.09"
    y="-154.82001"><tspan
-     style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+     style="font-size:11.19999981px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      sodipodi:role="line"
      id="tspan7928"
-     x="245.69"
+     x="244.09"
      y="-154.82001">Exome</tspan></text>
 
+
 <g
-   id="g7930" /><path
-   d="m 318.28,151.22 106.87,0 0,14.38 -106.87,0 0,-14.38 z"
-   style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none"
-   id="path7940"
-   inkscape:connector-curvature="0" /><text
+   id="g7930" /><text
    transform="scale(1,-1)"
    id="text7942"
-   x="332.95001"
+   x="328.14999"
    y="-154.82001"><tspan
-     style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+     style="font-size:11.19999981px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      sodipodi:role="line"
      id="tspan7944"
-     x="332.95001"
+     x="328.14999"
      y="-154.82001">Runx2 ChIP-Seq</tspan></text>
 
+
 <g
-   id="g7946" /><path
-   d="m 428.75,151.22 106.87,0 0,14.38 -106.87,0 0,-14.38 z"
-   style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none"
-   id="path7956"
-   inkscape:connector-curvature="0" /><text
+   id="g7946" /><text
    transform="scale(1,-1)"
    id="text7958"
-   x="459.72"
+   x="458.12"
    y="-154.82001"><tspan
-     style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+     style="font-size:11.19999981px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      sodipodi:role="line"
      id="tspan7960"
-     x="459.72"
+     x="458.12"
      y="-154.82001">Total RNA</tspan></text>
 
-<g
-   id="g7962" /><path
-   d="m 539.22,151.22 106.87,0 0,14.38 -106.87,0 0,-14.38 z"
-   style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none"
-   id="path7972"
-   inkscape:connector-curvature="0" /><text
-   transform="scale(1,-1)"
-   id="text7974"
-   x="577.92999"
-   y="-154.82001"><tspan
-     style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
-     sodipodi:role="line"
-     id="tspan7976"
-     x="577.92999"
-     y="-154.82001">mRNA</tspan></text>
 
 <g
-   id="g7978" /><path
-   d="m 649.69,151.22 106.87,0 0,14.38 -106.87,0 0,-14.38 z"
-   style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none"
-   id="path7988"
-   inkscape:connector-curvature="0" /><text
+   id="g7962" /><text
+   transform="scale(1,-1)"
+   id="text7974"
+   x="576.33002"
+   y="-154.82001"><tspan
+     style="font-size:11.19999981px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+     sodipodi:role="line"
+     id="tspan7976"
+     x="576.33002"
+     y="-154.82001">mRNA</tspan></text>
+
+
+<g
+   id="g7978" /><text
    transform="scale(1,-1)"
    id="text7990"
-   x="657.97003"
+   x="649.97015"
    y="-154.82001"><tspan
-     style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+     style="font-size:11.19999981px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      sodipodi:role="line"
      id="tspan7992"
-     x="657.97003"
+     x="649.97015"
      y="-154.82001">Metagenomic DNA</tspan></text>
+
 
 <g
    id="g7994" /><text
@@ -356,6 +338,7 @@
      x="59.41"
      y="-43.82">quip -r</tspan></text>
 
+
 <text
    id="text8002"
    transform="scale(1,-1)"
@@ -366,6 +349,7 @@
      style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      x="57.18"
      y="-72.650002">quip -a</tspan></text>
+
 
 <text
    id="text8006"
@@ -378,6 +362,7 @@
      x="71.360001"
      y="-101.49">quip</tspan></text>
 
+
 <text
    id="text8010"
    transform="scale(1,-1)"
@@ -388,6 +373,7 @@
      style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      x="19.82"
      y="-130.33">Uncompressed</tspan></text>
+
 
 <g
    id="g8014" /><g
@@ -1087,6 +1073,7 @@
      x="392.17999"
      y="-3.5999999">Relative Size</tspan></text>
 
+
 <g
    id="g8452" /><text
    id="text8456"
@@ -1098,6 +1085,7 @@
      style="font-size:12px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      x="65.230003"
      y="-3.9100001">Algorithm</tspan></text>
+
 
 <g
    id="g8460" /><g
@@ -1126,6 +1114,7 @@
      style="font-size:10px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica-Bold"
      x="770.84003"
      y="-115.15">Data</tspan></text>
+
 
 <path
    inkscape:connector-curvature="0"
@@ -1162,6 +1151,7 @@
      x="790.28003"
      y="-98.599998">Quality</tspan></text>
 
+
 <text
    id="text8528"
    transform="scale(1,-1)"
@@ -1172,6 +1162,7 @@
      style="font-size:10px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
      x="790.28003"
      y="-81.32">ID</tspan></text>
+
 
 <text
    id="text8534"
@@ -1184,6 +1175,7 @@
      x="790.28003"
      y="-64.040001">Sequence</tspan></text>
 
+
 <g
    id="g8538" /><g
    id="g8540" /><g
@@ -1192,15 +1184,16 @@
    id="g8546" /><text
    xml:space="preserve"
    style="font-size:22.39999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
-   x="683.89648"
-   y="-38.896503"
+   x="688.69641"
+   y="-40.496502"
    id="text9752"
    sodipodi:linespacing="125%"
    transform="scale(1,-1)"><tspan
      sodipodi:role="line"
      id="tspan9754"
-     x="683.89648"
-     y="-38.896503"
-     style="fill:#666666;fill-opacity:1">N/A</tspan></text>
+     x="688.69641"
+     y="-40.496502"
+     style="font-size:19.20000076px;fill:#666666;fill-opacity:1">N/A</tspan></text>
+
 
 </g></svg>
