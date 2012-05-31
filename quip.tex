@@ -471,60 +471,58 @@ will result in diminishing returns.
 
 
 \begin{table*}
-\begin{center}
-\begin{tabular}{lll}
-\textit{Program}     & \textit{Input} & \textit{Methods} \\ \hline
-gzip (1.4)           & Any &
-Lempel-Ziv \\
-
-bzip2 (1.0.6)        & Any &
-Burrows-Wheeler and Huffman coding \\
-
-xz  (5.0.3)          & Any & 
-Lempel-Ziv with arithmetic coding \\
-
-sra (2.1.10)         & FASTQ &
-No published description \\
-
-dsrc (0.3)           & FASTQ &
-Lempel-Ziv and Huffman coding. \\
-
-cramtools (0.85-b51) & BAM &
-Reference-based compression \\
-
-quip (1.1.0)         & FASTQ, SAM, BAM &
-Statistical modeling with arithmetic coding \\
-
-quip -a (1.1.0)      & FASTQ, SAM, BAM &
-Quip with assembly-based compression \\
-
-quip -r (1.1.0) & SAM, BAM &
-Quip with reference-reference based compression \\
-\end{tabular}
+\tableparts{
 \caption{Methods evaluated in Section \ref{section:results}.
 All methods compared are lossless, with the exception of Cramtools which
 does not preserve the original read identifiers.}
-\end{center}
 \label{tab:methods}
+}{
+\begin{tabular}{@{}lll@{}}
+\toprule
+Program     & Input & Methods \\ \colrule
+gzip (1.4)           & Any &
+Lempel-Ziv \\
+bzip2 (1.0.6)        & Any &
+Burrows-Wheeler and Huffman coding \\
+xz  (5.0.3)          & Any & 
+Lempel-Ziv with arithmetic coding \\
+sra (2.1.10)         & FASTQ &
+No published description \\
+dsrc (0.3)           & FASTQ &
+Lempel-Ziv and Huffman coding. \\
+cramtools (0.85-b51) & BAM &
+Reference-based compression \\
+quip (1.1.0)         & FASTQ, SAM, BAM &
+Statistical modeling with arithmetic coding \\
+quip -a (1.1.0)      & FASTQ, SAM, BAM &
+Quip with assembly-based compression \\
+quip -r (1.1.0) & SAM, BAM &
+Quip with reference-reference based compression \\ \botrule
+\end{tabular}
+}{}
 \end{table*}
 
 
 \begin{table}
-\begin{tabular}{lllr}
- \textit{Accession Number} & \textit{Description} & \textit{Read Length} & \textit{Size (GB)} \\ \hline
-SRR400039                 & Whole Genome      &   & 67.6 \\
-SRR125858                 & Exome             &   & 55.2 \\
-SRR372816                 & Runx2 ChIP-Seq    &   & 14.6 \\
-ERR030867                 & Total RNA         &   & 19.5 \\
-ERR030894                 & mRNA              &   & 16.4 \\
-SRR359032                 & Metagenomic DNA   &   &  8.9 \\
-\end{tabular}
+\tableparts{
 \caption{
 We evaluated compression on a single lane of sequencing data taken from a
 broad collection of seven studies. Except for the metagenomic data, each was
 generated from human samples. File size is shown in gigabytes.
 }
 \label{tab:datasets}
+}{
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Accession Number & Description     & Read Length & Size (GB) \\ \colrule
+SRR400039        & Whole Genome    &         101 & 67.6 \\
+SRR125858        & Exome           &          76 & 55.2 \\
+SRR372816        & Runx2 ChIP-Seq  &          50 & 14.6 \\
+ERR030867        & Total RNA       &         100 & 19.5 \\
+ERR030894        & mRNA            &          75 & 16.4 \\
+SRR359032        & Metagenomic DNA &         100 &  8.9 \\ \botrule
+\end{tabular}
+}{}
 \end{table}
 
 
@@ -561,22 +559,11 @@ with zlib.
 \label{fig:comp_decomp_time}
 \end{figure*}
 
+
+
+
 \begin{table}
-\centerline{
-\begin{tabular}{lrr}
-                & \multicolumn{2}{c}{\textit{Average Memory Usage (MB)}} \\ \cline{2-3}
-\textit{Method} & \textit{Compression} & \textit{Decompression} \\ \hline
-gzip            &     0.8              &    0.7 \\
-bzip2           &     7.0              &    4.0 \\
-xz              &    96.2              &    9.0 \\
-sra             &      NA              &   46.9 \\
-dsrc            &    28.3              &   15.1 \\
-cramtools       &  6803.8              & 6749.3 \\
-quip            &   412.1              &  412.9 \\
-quip -a         &   823.0              &  794.1 \\
-quip -r         &  1710.0              & 1717.2
-\end{tabular}
-}
+\tableparts{
 \caption{
 Maximum memory usage was recorded for each program and dataset. We list
 the average across datasets of these measurements. For most of the programs,
@@ -585,6 +572,24 @@ with the exception of SRA. Decompression used less that 60 MB except in the
 human exome sequencing dataset, in which over 1.4 GB was used. We report the mean
 with this outlier removed.}
 \label{tab:mem_usage}
+}
+{
+\begin{tabular}{@{}lrr@{}}
+\toprule
+                & \multicolumn{2}{c}{\textit{Average Memory Usage (MB)}} \\ \cline{2-3}
+\textit{Method} & \textit{Compression} & \textit{Decompression} \\ \colrule
+gzip            &     0.8              &    0.7 \\
+bzip2           &     7.0              &    4.0 \\
+xz              &    96.2              &    9.0 \\
+sra             &      NA              &   46.9 \\
+dsrc            &    28.3              &   15.1 \\
+cramtools       &  6803.8              & 6749.3 \\
+quip            &   412.1              &  412.9 \\
+quip -a         &   823.0              &  794.1 \\
+quip -r         &  1710.0              & 1717.2 \\ \botrule
+\end{tabular}
+}
+{}
 \end{table}
 
 
