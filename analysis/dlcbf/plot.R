@@ -13,7 +13,7 @@ pdf("benchmark.pdf", width = 6, height = 4)
 
 p <- qplot(data = xs, x = mem, y = fpr, geom = "line")
 p <- p + ylim(c(0, max(xs$fpr)))
-p <- p + scale_y_continuous(name = "False Positive Rate")
+p <- p + scale_y_continuous(name = "Collision Rate")
 p <- p + scale_x_continuous(name = "Memory\n(in proportion to sparsehash)")
 p <- p + theme_dcjstd()
 print(p)

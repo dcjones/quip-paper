@@ -7,13 +7,7 @@
 \jvolume{}
 \jissue{}
 
-
-% \usepackage{dcj}
-% \usepackage{hyperref}
-% \usepackage{graphicx}
-
 \begin{document}
-
 
 \title{Compression of next-generation sequencing reads aided by highly efficient de novo assembly}
 
@@ -36,8 +30,6 @@ $^{4}$Department of Microbiology, University of Washington, Seattle, WA
 }
 
 \history{}
-
-
 
 \maketitle
 
@@ -538,7 +530,7 @@ generated from human samples. File size is shown in gigabytes.
 
 \begin{figure*}
 \begin{center}
-\includegraphics[width=\textwidth]{sizes_tweaked_fixed.eps}
+\includegraphics[width=\textwidth]{sizes.eps}
 \end{center}
 \caption{
 A single lane from six sequencing experiments was compressed using each
@@ -551,13 +543,13 @@ to the metagenomic dataset. These plots are marked ``N/A''.
 
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{relative_sizes_tweaked.eps}}
+\centerline{\includegraphics[width=\textwidth]{relative_sizes.eps}}
 \caption{For uncompressed input files and compressed files produced by each invocation of Quip, we measured the size of read identifiers, sequences, and quality scores in proportion to the total file size.}
 \label{fig:relative_sizes}
 \end{figure*}
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{comp_decomp_time_tweaked.eps}}
+\centerline{\includegraphics[width=\textwidth]{comp_decomp_time.eps}}
 \caption{
 The wall clock run-time of each evaluation was recorded using the Unix time
 command. Compression speed in measured in megabytes of input per second, while
@@ -628,7 +620,7 @@ as collisions. Wall clock run-time and maximum memory usage were both recorded
 using the Unix time command.
 
 \begin{figure}[h]
-% \centerline{\includegraphics[width=0.5\textwidth]{analysis/dlcbf/benchmark.pdf}}
+\centerline{\includegraphics[width=0.5\textwidth]{dlcbf.eps}}
 \caption{
 The trade-off between memory usage and false positive rate in the dlCBF is
 evaluated by inserting 10 million unique 25-mers into tables of increasing
