@@ -1,22 +1,47 @@
 
-\documentclass[twocolumn]{article}
+\documentclass[a4,center,fleqn]{NAR}
 
-\newcommand{\Quip}{\texttt{Quip}}
+\copyrightyear{2012}
+\pubdate{}
+\pubyear{2012}
+\jvolume{}
+\jissue{}
 
-\usepackage{dcj}
-\usepackage{hyperref}
-\usepackage{natbib}
-\usepackage{graphicx}
 
-\title{Compression of next-generation sequencing reads aided by highly efficient de novo assembly}
-\author{Daniel C. Jones, Walter L. Ruzzo, Xinxia Peng, Michael G. Katze}
+% \usepackage{dcj}
+% \usepackage{hyperref}
+% \usepackage{graphicx}
 
 \begin{document}
 
+
+\title{Compression of next-generation sequencing reads aided by highly efficient de novo assembly}
+
+\author{%
+Daniel C. Jones\,$^{1,*}$,
+Walter L. Ruzzo\,$^{1,2,3}$,
+Xinxia Peng\,$^{4}$
+and Michael G. Katze\,$^{4}$%
+\footnote{To whom correspondence should be addressed.
+Tel: ; Fax: ; Email: dcjones@cs.washington.edu}}
+
+\address{
+$^{1}$Department of Computer Science and Engineering,
+University of Washington, Seattle, WA 98195-2350, USA
+$^{2}$Department of Genome Sciences, University of Washington, Seattle, WA
+98195-5065, USA
+$^{3}$Fred Hutchinson Cancer Research Center, Seattle, WA 98109, USA
+$^{4}$Department of Microbiology, University of Washington, Seattle, WA
+98195-7242, USA
+}
+
+\history{}
+
+
+
 \maketitle
 
-\section{Abstract}
-
+\begin{abstract}
 We present Quip, a lossless compression algorithm for next-generation
 sequencing data in the FASTQ and SAM/BAM formats. In addition to implementing
 reference-based compression, we have developed, to our knowledge, the first
@@ -31,6 +56,7 @@ size with no loss of information.
 
 Availability: Quip is freely available under a BSD license from
 \url{http://cs.washington.edu/homes/dcjones/quip}.
+\end{abstract}
 
 \section{Introduction}
 
@@ -347,8 +373,8 @@ producing accurate contigs.
 
 We compared Quip to three commonplace general-purpose compression algorithms:
 gzip, bzip2, and xz, as well as more recently developed domain-specific
-compression algorithms: DSRC \citep{Deorowicz2011} and Cramtools \citep{Hsi-
-YangFritz2011}. Other methods have been proposed \citep{Tembe2010,
+compression algorithms: DSRC \citep{Deorowicz2011} and Cramtools
+\citep{Hsi-YangFritz2011}. Other methods have been proposed \citep{Tembe2010,
 Kozanitis2011, Bhola2011}, but without publicly available software we were
 unable independently evaluate them. We have also restricted our focus to
 lossless compression, and have not evaluated a number of promising lossy
@@ -460,7 +486,7 @@ gzip (1.4)           & Any &
 Lempel-Ziv \\
 
 bzip2 (1.0.6)        & Any &
-Burrows-Wheeler and Lempel-Ziv \\
+Burrows-Wheeler and Huffman coding \\
 
 xz  (5.0.3)          & Any & 
 Lempel-Ziv with arithmetic coding \\
@@ -492,14 +518,14 @@ does not preserve the original read identifiers.}
 
 
 \begin{table}
-\begin{tabular}{rllr}
-  & \textit{Accession Number} & \textit{Description} & \textit{Size (GB)} \\ \hline
-1 & SRR400039                 & Whole Genome         & 67.6 \\
-2 & SRR125858                 & Exome                & 55.2 \\
-3 & SRR372816                 & Runx2 ChIP-Seq       & 14.6 \\
-4 & ERR030867                 & Total RNA            & 19.5 \\
-5 & ERR030894                 & mRNA                 & 16.4 \\
-6 & SRR359032                 & Metagenomic DNA      &  8.9 \\
+\begin{tabular}{lllr}
+ \textit{Accession Number} & \textit{Description} & \textit{Read Length} & \textit{Size (GB)} \\ \hline
+SRR400039                 & Whole Genome      &   & 67.6 \\
+SRR125858                 & Exome             &   & 55.2 \\
+SRR372816                 & Runx2 ChIP-Seq    &   & 14.6 \\
+ERR030867                 & Total RNA         &   & 19.5 \\
+ERR030894                 & mRNA              &   & 16.4 \\
+SRR359032                 & Metagenomic DNA   &   &  8.9 \\
 \end{tabular}
 \caption{
 We evaluated compression on a single lane of sequencing data taken from a
@@ -511,7 +537,9 @@ generated from human samples. File size is shown in gigabytes.
 
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{analysis/sizes_tweaked.pdf}}
+\begin{center}
+\includegraphics[width=\textwidth]{sizes_tweaked_fixed.eps}
+\end{center}
 \caption{
 A single lane from six sequencing experiments was compressed using each
 method. The size of each compressed file is plotted in proportion to the
@@ -523,13 +551,13 @@ to the metagenomic dataset. These plots are marked ``N/A''.
 
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{analysis/relative_sizes_tweaked.pdf}}
+\centerline{\includegraphics[width=\textwidth]{relative_sizes_tweaked.eps}}
 \caption{For uncompressed input files and compressed files produced by each invocation of Quip, we measured the size of read identifiers, sequences, and quality scores in proportion to the total file size.}
 \label{fig:relative_sizes}
 \end{figure*}
 
 \begin{figure*}
-\centerline{\includegraphics[width=\textwidth]{analysis/comp_decomp_time_tweaked.pdf}}
+\centerline{\includegraphics[width=\textwidth]{comp_decomp_time_tweaked.eps}}
 \caption{
 The wall clock run-time of each evaluation was recorded using the Unix time
 command. Compression speed in measured in megabytes of input per second, while
@@ -600,7 +628,7 @@ as collisions. Wall clock run-time and maximum memory usage were both recorded
 using the Unix time command.
 
 \begin{figure}[h]
-\centerline{\includegraphics[width=0.5\textwidth]{analysis/dlcbf/benchmark.pdf}}
+% \centerline{\includegraphics[width=0.5\textwidth]{analysis/dlcbf/benchmark.pdf}}
 \caption{
 The trade-off between memory usage and false positive rate in the dlCBF is
 evaluated by inserting 10 million unique 25-mers into tables of increasing
@@ -617,7 +645,7 @@ required only 4.48 seconds on average for the dlCBF to do the same, with both
 simulations run on a 2.8Ghz Intel Xeon processor. Table size did not greatly
 affect the runtime of the dlCBF. The assembler implemented in Quip uses a
 fixed table size, conservatively set to allow for 100 million unique $k$-mers
-while retaining a false positive rate well below 1\%.
+with a collision rate of approximately 0.08\% in simulations.
 
 Though the authors of sparsehash claim only a 4 bit overhead for each entry,
 and have gone to considerably effort to achieve such efficiency, it still must
@@ -713,14 +741,14 @@ which next-generation sequencing data can be compressed losslessly, yet
 remains efficient enough be a practical tool when coping with the deluge of
 data that biology research is now presented with.
 
-\section*{Acknowledgments}
+\section{Acknowledgments}
 
 We are grateful to James Bonfield, Matt Mahoney, Seth Hillbrand and other
 participants in the Pistoia Alliance Sequence Squeeze competition, whose work
 inspired many improvements to our own. While preparing the manuscript, Richard
 Green provided useful feedback and suggestions.
 
-\bibliographystyle{plainnat}
+\bibliographystyle{plain}
 \bibliography{quip}
 
 \end{document}
