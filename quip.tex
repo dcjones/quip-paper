@@ -378,11 +378,15 @@ compression (``quip -r''), and finally with assembly-based compression (``quip
 
 We acquired six datasets (Table \ref{tab:datasets}) from the Sequence Read
 Archive \citep{Leinonen2011}, representing a broad sampling of recent
-applications of next-generation sequencing. Genome and exome sequencing data
-was taken from 1000 Genomes Project, total and mRNA data from the Illumina
-BodyMap 2.0 dataset, Runx2 ChIP-Seq performed from prostate cancer cells, and
-metagenomic DNA sequencing of biofilm found in the extremely acidic drainage from
-the Richmond Mine in California. (TODO: track down citations).
+applications of next-generation sequencing. Genome and exome sequencing data was
+taken from 1000 Genomes Project
+\citep{The1000GenomesConsortium2010},
+total and mRNA data from the Illumina BodyMap
+2.0 dataset \citep{Asmann2012},
+Runx2 ChIP-Seq performed from prostate cancer cells
+\citep{Little2011}, and metagenomic DNA sequencing of biofilm found in the extremely acidic
+drainage from the Richmond Mine in California
+\citep{Denef2010}.
 
 The Sequence Read Archive provides data in its own SRA compression format
 which we also evaluate here. Programs for working with SRA files are provided
@@ -503,7 +507,7 @@ Quip with reference-reference based compression \\ \botrule
 \end{table*}
 
 
-\begin{table}
+\begin{table*}
 \tableparts{
 \caption{
 We evaluated compression on a single lane of sequencing data taken from a
@@ -512,18 +516,28 @@ generated from human samples. File size is shown in gigabytes.
 }
 \label{tab:datasets}
 }{
-\begin{tabular}{@{}llrr@{}}
+\begin{tabular}{@{}lllrr@{}}
 \toprule
-Accession Number & Description     & Read Length & Size (GB) \\ \colrule
-SRR400039        & Whole Genome    &         101 & 67.6 \\
-SRR125858        & Exome           &          76 & 55.2 \\
-SRR372816        & Runx2 ChIP-Seq  &          50 & 14.6 \\
-ERR030867        & Total RNA       &         100 & 19.5 \\
-ERR030894        & mRNA            &          75 & 16.4 \\
-SRR359032        & Metagenomic DNA &         100 &  8.9 \\ \botrule
+Accession Number & Description     & Source & Read Length & Size (GB) \\ \colrule
+SRR400039        & Whole Genome    &
+The 1000 Genomes Project \citep{The1000GenomesConsortium2010} & 101 & 67.6 \\
+SRR125858        & Exome           &
+The 1000 Genomes Project \citep{The1000GenomesConsortium2010} & 76 & 55.2 \\
+SRR372816        & Runx2 ChIP-Seq  & 
+Little, et al \citep{Little2011}
+&          50 & 14.6 \\
+ERR030867        & Total RNA       &
+BodyMap 2.0 Project, Asmann, et al \citep{Asmann2012}
+&         100 & 19.5 \\
+ERR030894        & mRNA            &  
+BodyMap 2.0 Project, Asmann, et al \citep{Asmann2012}
+&          75 & 16.4 \\
+SRR359032        & Metagenomic DNA & 
+Denef, et al \citep{Denef2010}
+&         100 &  8.9 \\ \botrule
 \end{tabular}
 }{}
-\end{table}
+\end{table*}
 
 
 \begin{figure*}
