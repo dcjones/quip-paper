@@ -183,7 +183,7 @@ capable of compressing both BAM/SAM and FASTQ files, retaining all information
 from the original file.
 
 
-\section{Methods}
+\section{Materials \& Methods}
 
 \subsection{Statistical Compression}
 
@@ -780,8 +780,8 @@ will involve more conditions, replicates, and timepoints.  Quip is able to
 compress NGS data at three times the speed of gzip, while performing de novo
 assembly of millions of reads, and up to five times as fast without the
 assembly step. Only DSRC is faster, but with consistently lower compression.
-In addition, our reference-based compression algorithm is nearly twice as fast
-as cramtools, with substantially better lossless compression.
+In addition, our reference-based compression algorithm matches the speed
+of cramtools but with substantially better lossless compression.
 
 As illustrated in Figure \ref{fig:relative_sizes}, the size of compressed NGS
 data is dominated by quality scores. More sophisticated compression of
@@ -796,20 +796,41 @@ Quality scores are encoded in Quip using an algorithm that is suitably
 generate so that lossy transformations (e.g., binning) can be automatically
 exploited, and can be treated as an optional preprocessing step.
 
+Future work will focus be focused in a few directions. A large body of work
+exists exploring heuristics to improve the the quality of de novo assembly,
+however the algorithm in Quip uses a very simple greedy approach. Assembly
+could likely be improved without greatly reducing efficiency by exploring more
+sophisticated methods. We currently perform no special handling of paired-end
+reads, so that mates are compressed independent of each other. In principle
+some gains to compression could be made by exploiting pair information. We
+also intend to implement parallel compression and decompression. Without
+sacrificing compression, this is a non-trivial task, but possible, and
+worthwhile given the abundance of data and ubiquity of multi-core processors.
+
 Combining reference-based and assembly-based techniques, with carefully tuned
 statistical compression, the algorithm presented in Quip probes the limit to
 which next-generation sequencing data can be compressed losslessly, yet
 remains efficient enough be a practical tool when coping with the deluge of
 data that biology research is now presented with.
 
+
+\section{Funding}
+
+Federal funds from the National Institute of Allergy and Infectious Diseases,
+National Institutes of Health, Department of Health and Human Services, under
+Contract No. HHSN272200800060C and by the Public Health Service grant
+(P51RR000166) from the National Institutes of Health, in whole or in part.
+
+
 \section{Acknowledgments}
 
 We are grateful to James Bonfield, Matt Mahoney, Seth Hillbrand and other
 participants in the Pistoia Alliance Sequence Squeeze competition, whose work
 inspired many improvements to our own. While preparing the manuscript, Richard
-Green provided useful feedback and suggestions.
+Green provided valuable feedback and suggestions.
 
-\subsubsection{Conlict of interest statement.} None declared.
+
+\subsubsection{Conflict of interest statement.} None declared.
 \newpage
 
 \bibliographystyle{plain}
