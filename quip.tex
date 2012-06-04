@@ -180,9 +180,7 @@ compression algorithm which leverages a variety of techniques to achieve very
 high compression over sequencing data of many types, yet remains efficient and
 practical. We have implement this approach in a open-source tool that is
 capable of compressing both BAM/SAM and FASTQ files, retaining all information
-from the original file and ensuring byte-for-byte data integrity with per-
-block checksums.
-
+from the original file.
 
 
 \section{Methods}
@@ -365,7 +363,26 @@ producing accurate contigs.
 
 \subsection{Metadata}
 
-%% TODO: notes on the file format.
+In designing the file format used by Quip, we included several useful features
+to protect data integrity. First, output is divided into blocks of several
+magabytes each. In each block a separate 64 bit checksum is computed for read
+identifiers, nucleotide sequences, and quality scores. When the archive is
+decompressed, these checksums are recomputed on the decompressed data and
+compared to the stored checksums, verifying the correctness of the output. The
+integrity of an archived dataset can also be checked with the ``quip --test''
+command.
+
+Apart from data corruption, reference-based compression creates the
+possibility of data loss if the reference used for compression is lost, or an
+incorrect reference is used. To protect against this, Quip files store a 64
+bit hash of of the reference sequence, ensuring that the same sequence is used
+for decompression. To assist in locating the correct reference, the file name,
+and the lengths and names of the sequences used in compression is also stored
+and accessible without decompression.
+
+Additionally, block headers store the number of reads and based compressed in
+the block, allowing summary statistics of a dataset to be listed without
+decompression using the ``quip --list'' command.
 
 
 \section{Results}
