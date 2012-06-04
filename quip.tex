@@ -19,6 +19,7 @@ and Michael G. Katze\,$^{4}$%
 \footnote{To whom correspondence should be addressed.
 Tel: ; Fax: ; Email: dcjones@cs.washington.edu}}
 
+
 \address{
 $^{1}$Department of Computer Science and Engineering,
 University of Washington, Seattle, WA 98195-2350, USA
@@ -72,6 +73,12 @@ complicated option. These difficulties will only be amplified as exponentially
 more sequencing data is generated,  implying that even moderate gains in
 domain-specific compression methods will translate into a significant
 reduction in the cost of managing these massive datasets over time.
+
+% **************************************************************
+% Keep this command to avoid text of first page running into the
+% first page footnotes
+\enlargethispage{-65.1pt}
+% **************************************************************
 
 Storage and analysis of NGS data centers primarily around two formats that
 have arisen recently as de facto standards: FASTQ and SAM. FASTQ stores, in
@@ -356,6 +363,11 @@ stored, not its abundance, which is essential information when the goal is
 producing accurate contigs.
 
 
+\subsection{Metadata}
+
+%% TODO: notes on the file format.
+
+
 \section{Results}
 \label{section:results}
 
@@ -527,10 +539,10 @@ SRR372816        & Runx2 ChIP-Seq  &
 Little, et al \citep{Little2011}
 &          50 & 14.6 \\
 ERR030867        & Total RNA       &
-BodyMap 2.0 Project, Asmann, et al \citep{Asmann2012}
+The BodyMap 2.0 Project, Asmann, et al \citep{Asmann2012}
 &         100 & 19.5 \\
 ERR030894        & mRNA            &  
-BodyMap 2.0 Project, Asmann, et al \citep{Asmann2012}
+The BodyMap 2.0 Project, Asmann, et al \citep{Asmann2012}
 &          75 & 16.4 \\
 SRR359032        & Metagenomic DNA & 
 Denef, et al \citep{Denef2010}
@@ -540,39 +552,59 @@ Denef, et al \citep{Denef2010}
 \end{table*}
 
 
+
 \begin{figure*}
 \begin{center}
 \includegraphics[width=\textwidth]{sizes.eps}
 \end{center}
 \caption{
-A single lane from six sequencing experiments was compressed using each
-method. The size of each compressed file is plotted in proportion to the
-uncompressed file size. Reference-based compression methods were not applied to
-to the metagenomic dataset. These plots are marked ``N/A''.
+One lane of sequencing data from each of six publicly available datasets
+(Table \ref{tab:datasets}) was compressed using a variety of methods (Table
+\ref{tab:methods}). The size of the compressed data is plotted in proportion
+to the size of uncompressed data. Note that all methods evaluated are entirely
+lossless with the exception of Cramtools, marked in this plot with an
+asterisk, which does not preserve read IDs, giving it some advantage in these
+comparisons. Reference-based compression methods, in which an external
+sequence database is used, were not applied to the metagenomic dataset for lack of an
+obvious reference. These
+plots are marked ``N/A''.
 }
 \label{fig:sizes}
 \end{figure*}
 
 
+
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{relative_sizes.eps}}
-\caption{For uncompressed input files and compressed files produced by each invocation of Quip, we measured the size of read identifiers, sequences, and quality scores in proportion to the total file size.}
+\caption{
+After compressing with Quip using the base algorithm (labeled ``quip''),
+assembly-based compression (``quip -a''), and reference-based compression
+(``quip -r''), we measure the size of read identifiers, nucleotide sequences,
+and quality scores in proportion to the total compressed file size. Reference-based
+compression (``quip -r'') was not applied to the metagenomic data.
+}
 \label{fig:relative_sizes}
 \end{figure*}
+
+
 
 \begin{figure*}
 \centerline{\includegraphics[width=\textwidth]{comp_decomp_time.eps}}
 \caption{
 The wall clock run-time of each evaluation was recorded using the Unix time
-command. Compression speed in measured in megabytes of input per second, while
-the decompression speed is in megabytes of output per second. In the case of
-the reference-based compressors, cramtools and quip -r, output is in the BAM
-format and so these measurements include time spend re-compressing the data
-with zlib.
+command. Run-time is normalized by the size of the original FASTQ file to
+obtain a compression and decompression throughput, plotted here in megabytes
+per second. Compression speed is plotted to the left of the zero axis, and
+decompression speed to the right. There is a not a convenient means of
+converting from FASTQ to SRA, so compression time is not measured for SRA.
+Additionally, reference-based methods are not applied to the metagenomic data.
+In the case of reference-based compression implemented in ``cramtools'' and
+``quip -r'', input and output is in the BAM format, so the speeds plotted here
+include time needed to decompress and compress the BAM input and output,
+respectively.
 }
 \label{fig:comp_decomp_time}
 \end{figure*}
-
 
 
 
@@ -605,6 +637,7 @@ quip -r         &  1710.0              & 1717.2 \\ \botrule
 }
 {}
 \end{table}
+
 
 
 \subsection{Characteristics of the d-left Counting Bloom Filter}
@@ -758,6 +791,9 @@ We are grateful to James Bonfield, Matt Mahoney, Seth Hillbrand and other
 participants in the Pistoia Alliance Sequence Squeeze competition, whose work
 inspired many improvements to our own. While preparing the manuscript, Richard
 Green provided useful feedback and suggestions.
+
+\subsubsection{Conlict of interest statement.} None declared.
+\newpage
 
 \bibliographystyle{plain}
 \bibliography{quip}
