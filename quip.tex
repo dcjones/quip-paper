@@ -168,7 +168,7 @@ sound. Conjuring a similarly principled method for NGS quality scores is
 difficult given that both the algorithms that generate them and the algorithms
 that are informed by them are moving targets. In the analysis by
 \citet{Kozanitis2011}, the authors are appropriately cautious in interpreting
-their results, pointing our that ``there are dozens of downstream applications
+their results, pointing out that ``there are dozens of downstream applications
 and much work needs to be done to ensure that coarsely quantized quality
 values will be acceptable for users.''
 
@@ -193,7 +193,7 @@ requires some care to implement efficiently (see \citet{Said2004} for an
 excellent review). Arithmetic coding can be thought of as a refinement of
 Huffman coding, the major advantage being that it is able to assign codes of a
 non-integral number of bits. If a symbol appears with probability 0.1, it can
-encoded near to its optimal code length of $-\log_2(0.1) \approx 3.3$ bits.
+be encoded near to its optimal code length of $-\log_2(0.1) \approx 3.3$ bits.
 Despite its power, it has historically seen much less use than Huffman coding,
 due in large part to fear of infringing on a number of patents that have now
 expired.
@@ -233,7 +233,7 @@ instruments, most parts of the ID can be compressed to consume almost no
 space; the remaining few bytes are accounted for by tile coordinates. These
 coordinates are almost never needed in downstream analysis, so removing them
 as a preprocessing step would shrink file sizes even further. The parser used
-is suitably general that no change to the compression algorithm would be
+is suitably general so that no change to the compression algorithm would be
 needed..
 
 
@@ -673,7 +673,8 @@ trade-off we performed a simple simulation comparing the dlCBF to a hash table.
 
 Comparisons of data structures are notoriously sensitive to the specifics of
 the implementation. To perform a meaningful benchmark, we compared our dlCBF
-implementation to the sparsehash library, an open source hash table
+implementation to the sparsehash library
+(\url{http://code.google.com/p/sparsehash/}), an open source hash table
 implementation with the expressed goal of maximizing space efficiency. Among
 many other uses, it is the core data structure in the ABySS
 \citep{Simpson2011} and PASHA \citep{Liu2011} assemblers.
@@ -693,7 +694,7 @@ using the Unix time command.
 \caption{
 The trade-off between memory usage and false positive rate in the dlCBF is
 evaluated by inserting 10 million unique 25-mers into tables of increasing
-size. Memory usage in reported as the proportion of the memory used by a
+size. Memory usage is reported as the proportion of the memory used by a
 memory efficient hash table to do the same.
 }
 \label{fig:dlcbf_bench}
@@ -793,7 +794,7 @@ transformations will have on downstream analysis. Future work should
 concentrate on studying lossy quality score compression, strictly guided by
 minimizing loss of accuracy in alignment, SNP calling, and other applications.
 Quality scores are encoded in Quip using an algorithm that is suitably
-generate so that lossy transformations (e.g., binning) can be automatically
+general so that lossy transformations (e.g., binning) can be automatically
 exploited, and can be treated as an optional preprocessing step.
 
 Future work will focus be focused in a few directions. A large body of work
