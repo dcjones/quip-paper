@@ -44,7 +44,7 @@ required by traditional de Bruijn graph assemblers, allowing millions of reads
 to be assembled very efficiently. Read sequences are then stored as positions
 within the assembled contigs. This is combined with statistical compression of
 read identifiers, quality scores, alignment information, and sequences,
-effectively collapsing very large datasets to less that 15\% of their original
+effectively collapsing very large datasets to less than 15\% of their original
 size with no loss of information.
 
 Availability: Quip is freely available under the BSD license from
@@ -156,9 +156,11 @@ without a very good understanding of its effect on downstream analysis.
 A number of lossy compression algorithms for quality scores have been
 proposed, including various binning schemes implemented in QScores-Archiver
 \citep{Wan2011} and SCALCE (\url{http://scalce.sourceforge.net}), scaling to a
-reduced alphabet with randomized rounding \citep{Kozanitis2011}, and
-discarding quality scores for bases which match a reference sequence \citep
-{Hsi-YangFritz2011}. \citet{Kozanitis2011} analyzed of the effects of their
+reduced alphabet with randomized rounding in SlimGene \citep{Kozanitis2011}, and
+discarding quality scores for bases which match a reference sequence
+in Cramtools
+\citep{Hsi-YangFritz2011}. In SCALCE, SlimGene, and Cramtools, quality scores
+may also be losslessly compressed. \citet{Kozanitis2011} analyzed of the effects of their
 algorithm on downstream analysis. Their results suggest that while some SNP
 calls are affected, they are primarily marginal, low-confidence calls between
 hetero- and homozygosity.
