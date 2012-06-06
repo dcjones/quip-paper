@@ -4,3 +4,19 @@ env = Environment()
 env["PDFLATEX"] = "xelatex"
 env.PDF("quip.tex")
 
+archive_files = [
+    "NAR-natbib.sty",
+    "NAR.cls",
+    "comp_decomp_time.eps",
+    "crop.sty",
+    "dlcbf.eps",
+    "fleqn.clo",
+    "nar.bst",
+    "quip.bib",
+    "quip.tex",
+    "relative_sizes.eps",
+    "sizes.eps",
+    "times.sty"]
+
+z = Zip('quip.zip', archive_files)
+Alias('zip', z)
