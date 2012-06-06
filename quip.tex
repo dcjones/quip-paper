@@ -17,7 +17,7 @@ Walter L. Ruzzo\,$^{1,2,3}$,
 Xinxia Peng\,$^{4}$
 and Michael G. Katze\,$^{4}$%
 \footnote{To whom correspondence should be addressed.
-Tel: ; Fax: ; Email: dcjones@cs.washington.edu}}
+Tel: +1 206 543 1695; Fax: +1 206 543 2969; Email: dcjones@cs.washington.edu}}
 
 
 \address{
@@ -47,7 +47,7 @@ read identifiers, quality scores, alignment information, and sequences,
 effectively collapsing very large datasets to less that 15\% of their original
 size with no loss of information.
 
-Availability: Quip is freely available under a BSD license from
+Availability: Quip is freely available under the BSD license from
 \url{http://cs.washington.edu/homes/dcjones/quip}.
 \end{abstract}
 
@@ -97,14 +97,15 @@ compressed binary version of SAM, which is far more compact and allows for
 relatively efficient random access.
 
 Compression of nucleotide sequences has been the target of some interest, but
-compressing NGS data, made up millions of short fragments of a greater whole,
-combined with metadata in form of read identifiers and quality scores,
-presents a very different problem and demands new techniques. Splitting the
-data into separate contexts for read identifiers, sequences, and quality
-scores and compressing them with the Lempel-Zip algorithm and Huffman coding
-has been explored explored by \citet{Tembe2010} and \citet{Deorowicz2011}, who
-demonstrate the promise of domain-specific compression with significant gains
-over general-purpose programs like gzip and bzip2.
+compressing NGS data, made up of millions of short fragments of a greater
+whole, combined with metadata in the form of read identifiers and quality
+scores, presents a very different problem and demands new techniques.
+Splitting the data into separate contexts for read identifiers, sequences, and
+quality scores and compressing them with the Lempel-Zip algorithm and Huffman
+coding has been explored explored by \citet{Tembe2010} and
+\citet{Deorowicz2011}, who demonstrate the promise of domain-specific
+compression with significant gains over general-purpose programs like gzip and
+bzip2.
 
 \citet{Kozanitis2011} and \citet{Hsi-YangFritz2011} proposed reference-based
 compression methods, exploiting the redundant nature of the data by aligning
@@ -190,7 +191,7 @@ from the original file.
 \subsection{Statistical Compression}
 
 The basis of our approach is founded on statistical compression using
-arithmetic coding, a form entropy coding which approaches optimality, but
+arithmetic coding, a form of entropy coding which approaches optimality, but
 requires some care to implement efficiently (see \citet{Said2004} for an
 excellent review). Arithmetic coding can be thought of as a refinement of
 Huffman coding, the major advantage being that it is able to assign codes of a
@@ -236,12 +237,12 @@ space; the remaining few bytes are accounted for by tile coordinates. These
 coordinates are almost never needed in downstream analysis, so removing them
 as a preprocessing step would shrink file sizes even further. The parser used
 is suitably general so that no change to the compression algorithm would be
-needed..
+needed.
 
 
 \subsubsection{Nucleotide Sequences}
 
-Te compress nucleotide sequences, we adopt a very simple model based on high-order
+To compress nucleotide sequences, we adopt a very simple model based on high-order
 Markov chains. The nucleotide at a given position in a read is predicted
 using the preceding twelve positions. This model uses more memory than
 traditional general-purpose compression algorithms ($4^{13} = 67,108,864$
@@ -340,9 +341,10 @@ quite space efficient counting Bloom filter. We base our assembler on a
 realization of the dlCBF. Because we use a probabilistic data structure,
 $k$-mers are occasionally reported to have incorrect (inflated) counts. The
 assembly can be made less accurate by these incorrect counts, however a poor
-assembly only results in slightly increasing the compression ratio,
-compression always remains lossless. In practice these collisions occur
-at a very low rate (this is explored in the results section).
+assembly only results in slightly increasing the compression ratio.
+Compression remains lossless regardless of the assembly quality, and in
+practice collisions in the dlCBF occur at a very low rate (this is explored in
+the results section).
 
 Given a probabilistic de Bruijn graph, we assemble contigs using a very simple
 greedy approach. A read sequence is used as a seed and extended on both ends
@@ -377,7 +379,7 @@ command.
 Apart from data corruption, reference-based compression creates the
 possibility of data loss if the reference used for compression is lost, or an
 incorrect reference is used. To protect against this, Quip files store a 64
-bit hash of of the reference sequence, ensuring that the same sequence is used
+bit hash of the reference sequence, ensuring that the same sequence is used
 for decompression. To assist in locating the correct reference, the file name,
 and the lengths and names of the sequences used in compression are also stored
 and accessible without decompression.
@@ -461,13 +463,14 @@ For the reference-based compressors, time spent aligning reads to the genome
 was not included, though it required up to several hours. Furthermore, while
 Quip is able to compress aligned reads in an uncompressed SAM file and then
 decompress back to SAM (or FASTQ), the input and output of Cramtools is
-necessarily a BAM file, and so we also use BAM files with Quip. This conflates
-measurements of compression and decompression time: since BAM files are compressed
-with zlib, compression times for the reference-based compressors include time
-needed to decompress the BAM file, and decompression times include
-re-compressing the output to BAM. Decompression speeds in particular for both
-Cramtools and reference-based Quip (``quip -r'') appear significantly lower
-than they otherwise might.
+necessarily a BAM file, and so we also use BAM files as input and output in
+our benchmarks of ``quip -r''. This conflates measurements of compression and
+decompression time: since BAM files are compressed with zlib, compression
+times for the reference-based compressors include time needed to decompress
+the BAM file, and decompression times include re-compressing the output to
+BAM. Consequently, decompression speeds in particular for both Cramtools and
+reference-based Quip (``quip -r'') appear significantly lower than they
+otherwise might.
 
 In the single-genome samples, we find that reference-based compression using
 Quip consistently results in the smallest file size (i.e., highest
@@ -476,14 +479,14 @@ even matching the reference-based approach used by Cramtools in two of the
 datasets. Assembly-based compression provides almost no advantage in the
 single-genome ChIP-Seq, Whole Genome, and Exome datasets. Because we assembly
 only several million reads (2.5 million, by default), coverage is only enough
-to assembly representatives of certain families of repeats in these datasets.
+to assemble representatives of certain families of repeats in these datasets.
 
 In the RNA-Seq datasets, more is assembled (approximately 35\% and 70\% of the
 reads are aligned to assembled contigs in the total RNA-Seq and mRNA-Seq
 datasets, respectively), but this only provides a small increase in the
-compression overall. The aligned reads in these datasets have relatively
-low-entropy sequences and would otherwise have been encoded only moderately less
-compactly with the Markov chain method.
+compression overall. Mostly probably, the aligned reads in these datasets are
+relatively low-entropy, composed largely of protein-coding sequence, and would
+be encoded only moderately less compactly with the Markov chain method.
 
 Nevertheless, assembly-based compression does provide a significant advantage
 in the metagenomic dataset. Nearly 95\% of reads align to assembled contigs,
@@ -491,7 +494,7 @@ resulting in a large reduction in compressed file size. Though this may be the
 result of low species diversity and may not extend to all metagenomic
 datasets, it shows that assembly-based compression is beneficial in certain
 cases. Though it comes at some cost, we are able to perform assembly with
-exceedingly  high efficiently: memory usage in increased only by 400 MB and
+exceedingly  high efficiently: memory usage is increased only by 400 MB and
 compression time is faster than all but DSRC and assembly-free Quip even while
 assembling 2.5 million reads and aligning millions more reads to the assembled
 contigs.
@@ -499,7 +502,7 @@ contigs.
 With all invocations of Quip, the size of the resulting file is dominated,
 sometimes overwhelmingly, by quality scores (Figure \ref{fig:relative_sizes}).
 There is not a direct way to measure this using the other methods evaluated,
-but this result suggests that increased compression of of nucleotide sequences
+but this result suggests that increased compression of nucleotide sequences
 will result in diminishing returns.
 
 
@@ -542,7 +545,7 @@ Quip with reference-reference based compression \\ \botrule
 \caption{
 We evaluated compression on a single lane of sequencing data taken from a
 broad collection of seven studies. Except for the metagenomic data, each was
-generated from human samples. File size is shown in gigabytes.
+generated from human samples. Uncompressed file sizes are shown in gigabytes.
 }
 \label{tab:datasets}
 }{
@@ -626,7 +629,7 @@ respectively.
 
 
 
-\begin{table}
+\begin{table}[h]
 \tableparts{
 \caption{
 Maximum memory usage was recorded for each program and dataset. We list
@@ -803,7 +806,7 @@ heuristics to improve the the quality of de novo assembly, however the
 algorithm in Quip uses a very simple greedy approach. Assembly could likely be
 improved without greatly reducing efficiency by exploring more sophisticated
 methods. We currently perform no special handling of paired-end reads, so that
-mates are compressed independent of each other. In principle some gains to
+mates are compressed independently of each other. In principle some gains to
 compression could be made by exploiting pair information. We also intend to
 implement parallel compression and decompression. This is non-trivial,
 but quite possible and worthwhile given the abundance of data and ubiquity of
