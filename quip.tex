@@ -445,11 +445,13 @@ extremely informative and retaining them may be desirable in some cases.
 It is important to note pure lossless compression is not the intended goal of
 Cramtools. Though we invoked Cramtools with options to include all quality
 scores (\texttt{--capture-all-quality-scores}), optional tags (\texttt
-{--capture-all-tags}), and retain unaligned reads (
-\texttt{--include-unmapped-reads}), it is unable to store the original read IDs. This puts it at
-advantage when comparing compressed file size, as all other programs compared
-were entirely lossless, but as the only other available reference-based
+{--capture-all-tags}), and retain unaligned reads ( \texttt{--include-
+unmapped-reads}), it is unable to store the original read IDs. Since all other
+programs evaluated were entirely lossless, measuring compressed file sizes is
+not an entirely fair comparison. Cramtools is put at some advantage simply by
+excluding identifiers. However, as the only other available reference-based
 compression method, it is a useful comparison.
+
 
 % Measurements
 
