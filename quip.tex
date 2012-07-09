@@ -47,7 +47,7 @@ read identifiers, quality scores, alignment information, and sequences,
 effectively collapsing very large datasets to less than 15\% of their original
 size with no loss of information.
 
-Availability: Quip is freely available under the BSD license from
+Availability: Quip is freely available under the 3-clause BSD license from
 \url{http://cs.washington.edu/homes/dcjones/quip}.
 \end{abstract}
 
@@ -336,17 +336,20 @@ these collisions occur pseudo-randomly, determined by the size of the table
 and the hash functions chosen, but generally with low probability.
 
 The Bloom filter is generalized in the counting Bloom filter, in which an
-arbitrary count can be associated with each element \citep{Fan2000}, and
-further refined in the d-left counting Bloom filter (dlCBF)
-\citep{Bonomi2006}, which requires significantly less space than the already
-quite space efficient counting Bloom filter. We base our assembler on a
-realization of the dlCBF. Because we use a probabilistic data structure,
-$k$-mers are occasionally reported to have incorrect (inflated) counts. The
-assembly can be made less accurate by these incorrect counts, however a poor
-assembly only results in slightly increasing the compression ratio.
-Compression remains lossless regardless of the assembly quality, and in
-practice collisions in the dlCBF occur at a very low rate (this is explored in
-the results section).
+arbitrary count can be associated with each element \citep{Fan2000}. A very
+similar data structure, the CountMin Sketch, is described by Carmode and Muthukrishnan (TODO:
+citation), which was arrived at independently of the prior Bloom filter research.
+\citet{Bonomi2006} subsequently described the d-left counting Bloom filter (dlCBF),
+a refinement of the counting Bloom filter requiring significantly less space to
+achieve the same false positive rate.
+
+We base our assembler on a realization of the dlCBF. Because we use a
+probabilistic data structure, $k$-mers are occasionally reported to have
+incorrect (inflated) counts. The assembly can be made less accurate by these
+incorrect counts, however a poor assembly only results in slightly increasing
+the compression ratio. Compression remains lossless regardless of the assembly
+quality, and in practice collisions in the dlCBF occur at a very low rate
+(this is explored in the results section).
 
 Given a probabilistic de Bruijn graph, we assemble contigs using a very simple
 greedy approach. A read sequence is used as a seed and extended on both ends
@@ -355,16 +358,33 @@ overlaps the end of the contig by $k-1$ bases. More sophisticated heuristics
 have been developed, but we choose to focus on efficiency, sacrificing a
 degree of accuracy.
 
-Counting $k$-mers efficiently with the help of Bloom filters was previously
-explored by \citet{Melsted2011}, who use it in addition, rather than
-in place, of a hash table. The Bloom filter is used as a ``staging area'' to
-store $k$-mers occurring only once, reducing the memory required by the hash
-table. Concurrently with our work, \citet{Pell2011} have also developed a
-probabilistic de Bruijn graph assembler, but using a non-counting Bloom
-filter. While they demonstrate a significant reduction in memory use, unlike
-other de Bruijn graph assemblers, only the presence or absence of a k-mer is
-stored, not its abundance, which is essential information when the goal is
-producing accurate contigs.
+Memory efficient assembly has been a goal of particular interest and is a
+topic of ongoing research. Conway and Bromage (TODO: citation) have developed
+a more efficient means of representing de Bruijn graphs using sparse bitmaps
+compressed with Elias-Fano encoding. The String Graph Assembler described by
+Simpson, et al, (TODO: citation) takes an entirely different approach, relying
+on a the FM-index (TODO: citation) to build compact representation of the set
+of short reads from which contigs are generating by searching for overlaps.
+Both of these algorithms sacrifice time-efficiency for their promising
+increases in space-efficiency, reporting significantly longer run times than
+traditional assemblers (e.g. both were compared to ABySS \citep{Simpson2011}).
+
+Our work is a significant departure in that we abandon exact representations
+and rely on a probabilistic data structure, an idea that has only very
+recently been breeched. Counting $k$-mers efficiently with the help of
+Bloom filters was previously explored by \citet{Melsted2011}, who use it in
+addition, rather than in place, of a hash table. The Bloom filter is used as a
+``staging area'' to store $k$-mers occurring only once, reducing the memory
+required by the hash table.
+
+Concurrently with our work, \citet{Pell2011} explore the use of probabilistic
+data structures in assembly, implementing a probabilistic de Bruijn graph
+based on the Bloom filter. While we go somewhat further, developing a full
+assembler using the more versatile dlCBF data structure, we have limited our
+discussion to data compression. \citet{Pell2011} on the other hand provide a
+compelling justification for the practicality of probabilistic de Bruijn
+graphs in the assembly problem, showing that the false-positive rate of the
+data structure is dwarfed by base-calling error in the data itself.
 
 
 \subsection{Metadata}
