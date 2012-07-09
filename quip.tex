@@ -303,11 +303,15 @@ Once contigs are assembled, read sequences are aligned using a simple ``seed
 and extend'' method: 12-mer seeds are matched using a hash table, and
 candidate alignments are evaluated using Hamming distance. The best
 (lowest Hamming distance) alignment is chosen, assuming it falls below a given
-cutoff, and the read is encoded as a position within the contig set. Roughly,
-this can be thought of as a variation on the Lempel-Ziv algorithm: as
-sequences are read, they are matched to previously observed data, or in this
-case, contigs assembled from previously observed data. These contigs are
-not explicitly stored, but rather reassembled during decompression.
+cutoff, and the read is encoded as a position within the contig set. This
+alignment method is simple and exceedingly fast, but it is most effective
+on platforms in which erroneous indels occur infrequently (e.g. Illumina).
+
+Roughly, assembly-based compression can can be thought of as a variation on
+the Lempel-Ziv algorithm: as sequences are read, they are matched to
+previously observed data, or in this case, contigs assembled from previously
+observed data. These contigs are not explicitly stored, but rather reassembled
+during decompression.
 
 
 % Probabalistic de bruijn graphs, etc
@@ -514,14 +518,16 @@ be encoded only moderately less compactly with the Markov chain method.
 
 Nevertheless, assembly-based compression does provide a significant advantage
 in the metagenomic dataset. Nearly 95\% of reads align to assembled contigs,
-resulting in a large reduction in compressed file size. Though this may be the
-result of low species diversity and may not extend to all metagenomic
-datasets, it shows that assembly-based compression is beneficial in certain
-cases. Though it comes at some cost, we are able to perform assembly with
-exceedingly  high efficiently: memory usage is increased only by 400 MB and
-compression time is faster than all but DSRC and assembly-free Quip even while
-assembling 2.5 million reads and aligning millions more reads to the assembled
-contigs.
+resulting in a large reduction in compressed file size. Metagenomic sequencing
+is a performed on such a wide variety of samples, that these results can not
+be easily generalized to all metagenomic datasets. Since success in assembly
+relies on high coverage, a significant role is played by species diversity,
+which can vary widely. Yet these results do show that assembly-based
+compression is beneficial in certain cases. Though it comes at some cost, we
+are able to perform assembly with exceedingly  high efficiently: memory usage
+is increased only by 400 MB and compression time is faster than all but DSRC
+and assembly-free Quip even while assembling 2.5 million reads and aligning
+millions more reads to the assembled contigs.
 
 With all invocations of Quip, the size of the resulting file is dominated,
 sometimes overwhelmingly, by quality scores (Figure \ref{fig:relative_sizes}).
