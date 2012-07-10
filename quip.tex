@@ -212,7 +212,7 @@ Quip, the same arithmetic coder is used to encode quality scores, read
 identifiers, nucleotide sequences, and alignment information, but with very
 different statistical models for each, which gives it a tremendous advantage
 over general-purpose compression algorithms that lump everything into a
-single context. Futhermore, all parts of our algorithm use adaptive modeling:
+single context. Furthermore, all parts of our algorithm use adaptive modeling:
 parameters are trained and updated as data is compressed, so that an
 increasingly tight fit and higher compression is achieved on large files.
 
@@ -379,7 +379,7 @@ compared to ABySS} \citep{Simpson2011}).
 
 \hl{Our work is a significant departure in that we abandon exact representations
 and rely on a probabilistic data structure, an idea that has only very
-recently been breeched.} Counting $k$-mers efficiently with the help of
+recently been breached.} Counting $k$-mers efficiently with the help of
 Bloom filters was previously explored by \citet{Melsted2011}, who use it in
 addition, rather than in place, of a hash table. The Bloom filter is used as a
 ``staging area'' to store $k$-mers occurring only once, reducing the memory
@@ -399,7 +399,7 @@ data structure is dwarfed by base-calling error in the data itself.}
 
 In designing the file format used by Quip, we included several useful features
 to protect data integrity. First, output is divided into blocks of several
-magabytes each. In each block a separate 64 bit checksum is computed for read
+megabytes each. In each block a separate 64 bit checksum is computed for read
 identifiers, nucleotide sequences, and quality scores. When the archive is
 decompressed, these checksums are recomputed on the decompressed data and
 compared to the stored checksums, verifying the correctness of the output. The
@@ -742,7 +742,7 @@ collision rate of less than 0.001 (Figure \ref{fig:dlcbf_bench}). While
 the hash table performed the 10 million insertions in 7.34 seconds, it
 required only 4.48 seconds on average for the dlCBF to do the same, with both
 simulations run on a 2.8Ghz Intel Xeon processor. Table size did not greatly
-affect the runtime of the dlCBF. The assembler implemented in Quip uses a
+affect the run time of the dlCBF. The assembler implemented in Quip uses a
 fixed table size, conservatively set to allow for 100 million unique $k$-mers
 with a collision rate of approximately 0.08\% in simulations.
 
@@ -811,7 +811,7 @@ computational resources. Targeting low-memory systems would not be of
 particular benefit: next-generation sequencing precludes previous-generation
 hardware.
 
-Though memory consumption is not a top priority, runtime is important. Newer
+Though memory consumption is not a top priority, run time is important. Newer
 instruments like the HiSeq 2000 produce far more data per lane than previously
 possible. And, as the cost of sequencing continues to decrease, experiments
 will involve more conditions, replicates, and timepoints.  Quip is able to
