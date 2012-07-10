@@ -341,11 +341,11 @@ and the hash functions chosen, but generally with low probability.
 
 The Bloom filter is generalized in the counting Bloom filter, in which an
 arbitrary count can be associated with each element \citep{Fan2000}. A very
-similar data structure, the CountMin Sketch, is described by Carmode and Muthukrishnan (TODO:
-citation), which was arrived at independently of the prior Bloom filter research.
-\citet{Bonomi2006} subsequently described the d-left counting Bloom filter (dlCBF),
-a refinement of the counting Bloom filter requiring significantly less space to
-achieve the same false positive rate.
+similar data structure, the CountMin Sketch, is described by
+\citet{Cormode2005}, which was arrived at independently of the prior Bloom
+filter research.  \citet{Bonomi2006} subsequently described the d-left counting
+Bloom filter (dlCBF), a refinement of the counting Bloom filter requiring
+significantly less space to achieve the same false positive rate.
 
 We base our assembler on a realization of the dlCBF. Because we use a
 probabilistic data structure, $k$-mers are occasionally reported to have
@@ -362,16 +362,16 @@ overlaps the end of the contig by $k-1$ bases. More sophisticated heuristics
 have been developed, but we choose to focus on efficiency, sacrificing a
 degree of accuracy.
 
-Memory efficient assembly has been a goal of particular interest and is a
-topic of ongoing research. Conway and Bromage (TODO: citation) have developed
-a more efficient means of representing de Bruijn graphs using sparse bitmaps
-compressed with Elias-Fano encoding. The String Graph Assembler described by
-Simpson, et al, (TODO: citation) takes an entirely different approach, relying
-on a the FM-index (TODO: citation) to build compact representation of the set
-of short reads from which contigs are generating by searching for overlaps.
-Both of these algorithms sacrifice time-efficiency for their promising
-increases in space-efficiency, reporting significantly longer run times than
-traditional assemblers (e.g. both were compared to ABySS \citep{Simpson2011}).
+Memory efficient assembly has been a goal of particular interest and is a topic
+of ongoing research. \citet{Conway2011} have developed a more efficient means of
+representing de Bruijn graphs using sparse bitmaps compressed with Elias-Fano
+encoding. The String Graph Assembler described by \citet{Simpson2012} takes an
+entirely different approach, relying on a the FM-index \citep{Ferragina2000} to
+build compact representation of the set of short reads from which contigs are
+generating by searching for overlaps.  Both of these algorithms sacrifice
+time-efficiency for their promising increases in space-efficiency, reporting
+significantly longer run times than traditional assemblers (e.g. both were
+compared to ABySS \citep{Simpson2011}).
 
 Our work is a significant departure in that we abandon exact representations
 and rely on a probabilistic data structure, an idea that has only very
