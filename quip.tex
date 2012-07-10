@@ -1,5 +1,8 @@
 
 \documentclass[a4,center,fleqn]{NAR}
+\usepackage{color}
+\usepackage{soul}
+\sethlcolor{red}
 
 \copyrightyear{2012}
 \pubdate{}
@@ -47,7 +50,7 @@ read identifiers, quality scores, alignment information, and sequences,
 effectively collapsing very large datasets to less than 15\% of their original
 size with no loss of information.
 
-Availability: Quip is freely available under the 3-clause BSD license from
+Availability: Quip is freely available under the \hl{3-clause} BSD license from
 \url{http://cs.washington.edu/homes/dcjones/quip}.
 \end{abstract}
 
@@ -303,9 +306,9 @@ Once contigs are assembled, read sequences are aligned using a simple ``seed
 and extend'' method: 12-mer seeds are matched using a hash table, and
 candidate alignments are evaluated using Hamming distance. The best
 (lowest Hamming distance) alignment is chosen, assuming it falls below a given
-cutoff, and the read is encoded as a position within the contig set. This
+cutoff, and the read is encoded as a position within the contig set. \hl{This
 alignment method is simple and exceedingly fast, but it is most effective
-on platforms in which erroneous indels occur infrequently (e.g. Illumina).
+on platforms in which erroneous indels occur infrequently (e.g. Illumina).}
 
 Roughly, assembly-based compression can can be thought of as a variation on
 the Lempel-Ziv algorithm: as sequences are read, they are matched to
@@ -340,10 +343,10 @@ these collisions occur pseudo-randomly, determined by the size of the table
 and the hash functions chosen, but generally with low probability.
 
 The Bloom filter is generalized in the counting Bloom filter, in which an
-arbitrary count can be associated with each element \citep{Fan2000}. A very
-similar data structure, the CountMin Sketch, is described by
-\citet{Cormode2005}, which was arrived at independently of the prior Bloom
-filter research.  \citet{Bonomi2006} subsequently described the d-left counting
+arbitrary count can be associated with each element \citep{Fan2000}. \hl{A very
+similar data structure, the CountMin Sketch, is described by}
+\citet{Cormode2005}, \hl{which was arrived at independently of the prior Bloom
+filter research.}  \citet{Bonomi2006} subsequently described the d-left counting
 Bloom filter (dlCBF), a refinement of the counting Bloom filter requiring
 significantly less space to achieve the same false positive rate.
 
@@ -362,33 +365,34 @@ overlaps the end of the contig by $k-1$ bases. More sophisticated heuristics
 have been developed, but we choose to focus on efficiency, sacrificing a
 degree of accuracy.
 
-Memory efficient assembly has been a goal of particular interest and is a topic
-of ongoing research. \citet{Conway2011} have developed a more efficient means of
+\hl{Memory efficient assembly has been a goal of particular interest and is a topic
+of ongoing research.} \citet{Conway2011} \hl{have developed a more efficient means of
 representing de Bruijn graphs using sparse bitmaps compressed with Elias-Fano
-encoding. The String Graph Assembler described by \citet{Simpson2012} takes an
-entirely different approach, relying on a the FM-index \citep{Ferragina2000} to
+encoding. The String Graph Assembler described by} \citet{Simpson2012} \hl{takes an
+entirely different approach, relying on a the FM-index} \citep{Ferragina2000}
+\hl{to
 build compact representation of the set of short reads from which contigs are
 generating by searching for overlaps.  Both of these algorithms sacrifice
 time-efficiency for their promising increases in space-efficiency, reporting
 significantly longer run times than traditional assemblers (e.g. both were
-compared to ABySS \citep{Simpson2011}).
+compared to ABySS} \citep{Simpson2011}).
 
-Our work is a significant departure in that we abandon exact representations
+\hl{Our work is a significant departure in that we abandon exact representations
 and rely on a probabilistic data structure, an idea that has only very
-recently been breeched. Counting $k$-mers efficiently with the help of
+recently been breeched.} Counting $k$-mers efficiently with the help of
 Bloom filters was previously explored by \citet{Melsted2011}, who use it in
 addition, rather than in place, of a hash table. The Bloom filter is used as a
 ``staging area'' to store $k$-mers occurring only once, reducing the memory
 required by the hash table.
 
-Concurrently with our work, \citet{Pell2011} explore the use of probabilistic
+\hl{Concurrently with our work,} \citet{Pell2011} \hl{explore the use of probabilistic
 data structures in assembly, implementing a probabilistic de Bruijn graph
 based on the Bloom filter. While we go somewhat further, developing a full
 assembler using the more versatile dlCBF data structure, we have limited our
-discussion to data compression. \citet{Pell2011} on the other hand provide a
+discussion to data compression.} \citet{Pell2011} \hl{on the other hand provide a
 compelling justification for the practicality of probabilistic de Bruijn
 graphs in the assembly problem, showing that the false-positive rate of the
-data structure is dwarfed by base-calling error in the data itself.
+data structure is dwarfed by base-calling error in the data itself.}
 
 
 \subsection{Metadata}
@@ -468,13 +472,13 @@ extremely informative and retaining them may be desirable in some cases.
 
 It is important to note pure lossless compression is not the intended goal of
 Cramtools. Though we invoked Cramtools with options to include all quality
-scores (\texttt{--capture-all-quality-scores}), optional tags (\texttt
-{--capture-all-tags}), and retain unaligned reads ( \texttt{--include-
-unmapped-reads}), it is unable to store the original read IDs. Since all other
-programs evaluated were entirely lossless, measuring compressed file sizes is
-not an entirely fair comparison. Cramtools is put at some advantage simply by
-excluding identifiers. However, as the only other available reference-based
-compression method, it is a useful comparison.
+scores (\texttt{--capture-all-quality-scores}), optional tags (
+\texttt{--capture-all-tags}), and retain unaligned reads (
+\texttt{--include-unmapped-reads}), it is unable to store the original read IDs.
+\hl{Since all other programs evaluated were entirely lossless, measuring compressed
+file sizes is not an entirely fair comparison. Cramtools is put at some
+advantage simply by excluding identifiers.} However, as the only other available
+reference-based compression method, it is a useful comparison.
 
 
 % Measurements
@@ -518,11 +522,11 @@ be encoded only moderately less compactly with the Markov chain method.
 
 Nevertheless, assembly-based compression does provide a significant advantage
 in the metagenomic dataset. Nearly 95\% of reads align to assembled contigs,
-resulting in a large reduction in compressed file size. Metagenomic sequencing
+resulting in a large reduction in compressed file size. \hl{Metagenomic sequencing
 is a performed on such a wide variety of samples, that these results can not
 be easily generalized to all metagenomic datasets. Since success in assembly
 relies on high coverage, a significant role is played by species diversity,
-which can vary widely. Yet these results do show that assembly-based
+which can vary widely.} Yet these results do show that assembly-based
 compression is beneficial in certain cases. Though it comes at some cost, we
 are able to perform assembly with exceedingly  high efficiently: memory usage
 is increased only by 400 MB and compression time is faster than all but DSRC
